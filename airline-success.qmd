@@ -3,6 +3,9 @@ title: "Final Project: What makes an airline succesful?"
 format: 
   html:
     toc: true
+    code-tools:
+       source: https://github.com/jjallaire/airline-success
+       toggle: false
     output-file: index.html
 execute: 
   echo: false
