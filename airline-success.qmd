@@ -1,0 +1,626 @@
+---
+title: "Final Project: What makes an airline succesful?"
+format: 
+  html:
+    toc: true
+    output-file: index.html
+execute: 
+  echo: false
+---
+
+### When it all first started
+
+A few hundreds of years ago, no man ever think that they could fly or concure the sky. But it all changed when the Wright Brothers did the unthinkable, creating a machine that enable human to fly.
+
+From then on, the aviation industry has never ceased to stop growing. Today, Boeing and Airbus dominate the airplane manufacturing industry, creating durable, reliable, and fuel-efficient aircrafts. Today, hundreds of different airlines fly above our heads everyday, allowing travel between countries to be easier than ever.
+
+As a team, we gathered data from different sources - ________ - to take a look into what makes an airline company successful. We first narrow our scope to airlines in the United States and analyze the income and revenue. We then zone in into customer experience ratings and travel distance to uncover the relationship between multiple different services and factors in air travel.
+
+Perhaps the most discussed topic in 2020, we then take a look into COVID-19 and its impact on the aviation industry as a whole.
+
+
+
+## Which airline is doing well?
+
+### Measures of success?
+
+Success can be measured in many ways but we will mainly focus on these three areas: 
+- How much did the company make in total - Revenue?
+- How much did the company actually earn in net income?
+
+With the revenue, it measures how much of an impact - the market share that company took from the total customers and money that are circulating around. This shows how big a company is in the aviation industry.
+
+However, just those indicators are not enough the measure success. Big companies could be failing due to lack of good management, so a "net income" would determine out of all those, which airlines are the best at managing expenses and the corporate in general.
+
+
+### Airline and finance
+
+::: {layout.ncol=3}
+```{ojs}
+//| echo: false
+viewof options_select = select({
+  title: "Select Range of Airlines",
+  options: ["All", "Top 1-20", "Mid 21-30", "Bot 31-50"]
+})
+```
+
+```{ojs}
+//| echo: false
+viewof sort_by = select({
+  title: "Sort by",
+  options: ["Revenue", "Income"]
+})
+```
+
+```{ojs}
+//| echo: false
+viewof yearSlider = slider({
+  title: "Select Year Slider",
+  min: 1990,
+  max: 2020,
+  step: 1,
+  value: 2020,
+  description: "Use the slider to select year"
+})
+```
+:::
+
+```{ojs}
+finance_chart = {
+  const height = 500;
+  const filter = {
+    All: [0, 51],
+    "Top 1-20": [0, 20],
+    "Mid 21-30": [21, 30],
+    "Bot 31-50": [31, 51]
+  };
+  const svg = d3.create("svg").attr("viewBox", [0, 0, width, height]);
+  svg.node().update = (metrics, inputYear, opt) => {
+    svg.selectAll("*").remove();
+    const filt_year = select_data.filter(d => d.year == inputYear);
+
+    let data_grouped = [];
+    filt_year.reduce(function(res, value) {
+      if (!res[value.airline]) {
+        res[value.airline] = {
+          airline: value.airline,
+          income: 0,
+          revenue: 0,
+          code: value.airCode,
+          year: value.year
+        };
+        data_grouped.push(res[value.airline]);
+      }
+      res[value.airline].income += value.income;
+      res[value.airline].revenue += value.revenue;
+      return res;
+    }, {});
+    data_grouped = data_grouped.sort(function(a, b) {
+      if (opt == "Revenue") {
+        return b.revenue - a.revenue;
+      }
+      return b.income - a.income;
+    });
+
+    const filt_range = filter[metrics];
+    const filtered_data = data_grouped.slice(filt_range[0], filt_range[1]);
+
+    const x0 = d3
+      .scaleBand()
+      .domain(filtered_data.map(d => d["code"]))
+      .rangeRound([margin.left, width - margin.right])
+      .paddingInner(0.1);
+
+    const x1 = d3
+      .scaleBand()
+      .domain(keys)
+      .rangeRound([0, x0.bandwidth()])
+      .padding(0.05);
+
+    const y = d3
+      .scaleLinear()
+      .domain([
+        d3.min(filtered_data, d => d3.min(keys, key => d[key])),
+        d3.max(filtered_data, d => d3.max(keys, key => d[key]))
+      ])
+      .nice()
+      .range([height - margin.bottom, margin.top]);
+
+    svg
+      .append("g")
+      .selectAll("g")
+      .data(filtered_data)
+      .join("g")
+      .attr("transform", d => `translate(${x0(d.code)},0)`)
+      .selectAll("rect")
+      .data(d => keys.map(key => ({ key, value: d[key], airline: d.airline })))
+      .join("rect")
+      .attr("x", d => x1(d.key))
+      .attr("y", d => {
+        if (d.value < 0) {
+          return y(0);
+        } else {
+          return y(d.value);
+        }
+      })
+      .attr("width", x1.bandwidth())
+      .attr("height", d => Math.abs(y(0) - y(d.value)))
+      .attr("fill", d => color(d.key))
+      .on('mouseenter', function(e, d, i) {
+        tooltip
+          .html(
+            `<div>${d.airline}</div><div>${d.key}</div><div>${Math.round(
+              d.value
+            )}</div>`
+          )
+          .style('visibility', 'visible');
+
+        d3.select(this).attr('fill', '#eec42d');
+      })
+      .on('mousemove', function(e) {
+        const side_padding = 3;
+        let x = e.pageX - 50;
+        let y = e.pageY - 180;
+        tooltip.style('top', y + 10 + 'px').style('left', x + 10 + 'px');
+      })
+      .on('mouseout', function() {
+        tooltip.html(``).style('visibility', 'hidden');
+        d3.select(this)
+          .transition()
+          .attr('fill', d => color(d.key));
+      });
+
+    // update xaxis too
+
+    const xAxis = g =>
+      g
+        .attr("transform", `translate(0,${height - margin.bottom})`)
+        .call(d3.axisBottom(x0).tickSizeOuter(0))
+        .call(g => g.select(".domain").remove());
+
+    // update yaxis too
+    const yAxis = g =>
+      g
+        .attr("transform", `translate(${margin.left},0)`)
+        .call(d3.axisLeft(y).ticks(null, "s"))
+        .call(g => g.select(".domain").remove());
+
+    svg
+      .append("text")
+      .text(metrics + " Airlines Income and Revenue ($) in " + yearSlider)
+      .attr("transform", "translate(200, 30)")
+      .attr("font-weight", "bold")
+      .attr("font-size", "18px");
+
+    svg
+      .append("text")
+      .attr(
+        "transform",
+        `translate(${margin.left +
+          (x0.range()[1] - x0.range()[0]) / 2},${height - 3})`
+      )
+      .style("text-anchor", "middle")
+      .attr("font-size", "12px")
+      .text("Airline code");
+
+    svg.append("g").call(xAxis);
+
+    svg.append("g").call(yAxis);
+
+    svg.append("g").call(legend_finance);
+  };
+
+  return svg.node();
+}
+```
+
+Looking at this chart, we can see that over the last several years, the three biggest airlines in terms of revenue were mainly Delta Airlines, American Airlines, and United Airlines. These three also have the biggest income out of all airlines, however, when we look at the ranking by income, Southwest Airlines, which has significantly lower revenue than those three were up there, indicating that despite small revenues, it is doing well in terms of income and is matching that of those big companies.
+
+There is an anomaly in the year 2020 where the revenue significantly dropped for those airlines and that the income is heavily in the negative side. This signifies that the impact of virus is very detrimental to commercial airines. The only airline with some portion of positive income is Federal Express Corparation (FX) which is solely for cargo delivery.
+
+
+## Customer Satisfaction
+
+### Customer Satisfaction by Flight Distance
+
+
+This part of the visualization looks broader into the service categories, such as "Gate location", "Legroom Service" and so on. This visualization was created hoping to gain more insight on the relationship between customer satsifcation for each of the services and the travel distances of each customers. 
+
+There are total 14 service categories used in this visualization :   
+
+  * "Inflight wifi service"  
+  * "Departure/Arrival time convenient"  
+  * "Ease of Online booking"  
+  * "Gate location"  
+  * "Food and drink"  
+  * "Online boarding"  
+  * "Seat comfort"  
+  * "Inflight entertainment"  
+  * "On-board service"  
+  * "Leg room service"  
+  * "Baggage handling"  
+  * "Checkin service"  
+  * "Inflight service"  
+  * "Cleanliness"  
+
+These categories are given scores that represents the customer satisfaction, ranging from 0 to 5, with 0 being not satisfactory at all, and 5 being very satisfactory.
+
+The scores are further broken down into each customer's travel distance, which consists of 
+ * <= 1000 miles 
+ * 1001-2000 miles 
+ * 2001-3000 miles 
+ * 3001-4000 miles 
+ * => 4000 miles
+
+
+
+
+```{ojs}
+//| echo: false
+viewof dataType = select({
+  title: "Select Data that you are interested in",
+  options: dtype
+})
+```
+
+```{ojs}
+//| echo: false
+chart5_Color
+```
+
+
+Looking at the chart above, we can see the trend of customer satisfaction by distance.
+
+As it can be seen from the graph, the number of customers with travel distance greater than 4000 miles are less than 500 people. Hence, they have the lowest ratio in the grouped bar chart of customer satisfaction grouped by travel distances. On the contrary, the majority of the people had travelling distance less than 1000 miles. This means that the customer's trips are mostly domestic, and short-mid range interncontinental rather than long range intercontinental. 
+
+The general trendline across most of the categories is that customers regardless of the distance of the travel, are generally satisfied with the services that the airline is providing. However, the key point is that the dataset is heavily biased towards the domestic, short range travellers. 
+
+**Some notable key points are :**  
+
+even though the general trend of the gateway location score higher than 3 (meaning that people are generally satisfied with the gateway location), most of the customers thought that the gateway location was somewhat satisfying, rather than highly satisfying. None thought that it was not satisfactory at all. 
+
+Another similar finding is for the "in-flight wifi service", and "ease of online booking"; The consensus is that the service was somewhat satisfactory, however, there were some customers who found it to be not satisfactory at all, which occured for almost all distances. 
+
+Moreover, there were a high ratio of the customers who had travel distance of less than 1000, who were not satisfied with the time convenience, or the "Departure/Arrival time convenience", compared to customers with other groups of travel distances. 
+
+Therefore, keeping a focus on these points would result in higher overall customer satisfaction. 
+
+If there existed a dataset that has standard deviation applied to it, it would also yield more information about how sample of travellers actually think about the services in less biased way. 
+
+**All in all**, if the data fully reflects the correct ratio of the customers, then it would be ideal to continue focusing on the opinions of the domestic, short, mid range intercontinental distance travellers, as they outnumber the number of the long range intercontinental travellers. This seems like a suitable strategy for now, as many airline companies have less profitable revenue in interncontinental flights due to COVID. 
+
+
+
+### Satisfaction by Customer Traits
+Let's breakdown these service categories further. Ideally, these should give a better picture of customer experience 
+than the overall satisfaction variable, which is just a simple binary variable (satisfied or not). Do these categories correlate to satisfaction overall?
+
+We also wanted to view how service categories of flight experience were rated between different types of customers. Do we notice a change in ratings between different passengers? To do this, we selected 8 **categories of ratings** that felt representative of the overall flight experience:
+  - On Time (how convenient was arrival and departure time?)
+  - Booking (ease of the booking process)
+  - Check in (ease of the check in process)
+  - Seat Comfort
+  - Service (quality of inflight service)
+  - Food & Drink (quality of inflight food and drink)
+  - Entertainment (quality of inflight entertainment options)
+  - Cleanliness
+
+For each category, the data was grouped by a certain customer trait and summarized by average rating. We identified 5 types of customer **groupings** with significant meaning:
+  - Passenger class (Economy, Economy Plus, Business)
+  - Type of travel (business or personal)
+  - Loyalty to airline (fly only with this airline or also with others)
+  - Age (quantized by children, young adults, adults and seniors)
+  - Overall satisfaction (this was included to answer our first question-- are higher ratings indicative of higher satisfaction?)
+
+Select a grouping below to view the average ratings for each category:
+
+
+```{ojs}
+//| echo: false
+viewof group = select({
+  description: "Select grouping",
+  options: filters
+})
+```
+
+```{ojs}
+//| echo: false
+chart_satis
+```
+
+
+There are several interesting trends to observe here.
+
+For one, business class passengers tend to rate their experiences higher than economy / economy plus passengers. However, business class rated their arrival and departure times significantly lower on average. This effect can also be seen in the *Type of Travel* grouping, where people flying for business generally rate most parts of their experience higher, but not on time. In fact, compared to the difference in categories like *Service* or even *Seat Comfort* the difference in *On Time* is much larger.
+
+Across age groups, adults (25 - 46) tended to rate their experiences the highest. Young adults (18 - 24) generally came next, followed by children and seniors in no particular order. Again here there was some variation with the *On Time* category, where seniors and children rated their experience higher. 
+
+In terms of *customer loyalty*, passengers who consistently flew with their airline rated their experiences on average higher across the board than those who fly with multiple airlines. 
+
+Across all groupings, customers generally rated the *booking* experience lowest.
+
+*Overall satisfaction*, while seemingly a redudant grouping, does confirm that there is a correlation between higher individual ratings and overall satisfaction. This grouping had the largest differences between average ratings, suggesting that satisfaction in each individual rating does matter for overall satisfaction.
+
+**What does all of this tell us about the customer experience?** For business class passengers (and passengers traveling for the purpose of business) timeliness of arrival and departure appears to be the biggest area in need of improvement. For these customers, airlines should focus their attention on the convience of arrival and departure times.
+
+In terms of age, the lowest satisfaction was among children and seniors. While this is perhaps somewhat unavoidable-- it is not hard to imagine how young kids and elderly people tend have a worse experience than adults on flights-- airlines could improve their success in customer satisfaction by making accomodations for these groups.
+
+In terms of airline loyalty, there are few surprises here. Customers who are loyal to an airline tend to be more satisfied than those who are not. Airlines should continue to focus on maintaining customer loyalty, as customers who consistently fly with the same airline tend to rate their experiences higher.
+
+Finally, across the board, the booking experience tends to be the lowest rated. While this occurs outside the airport and plane, it is a crucial part of the flying process--and one that airlines could do well not to overlook for improving customer satsifaction.
+
+
+
+### How do Arrival and Departure Delays Affect Satisfaction?
+We saw in the chart above that arrival and departure times were a big factor for business customers. However, that visualization doesn't really give a good sense of the actual impact delays have on satisfaction because we're just looking at averages across customer groups. We wanted to know: *do greater delay times reduce customer satisfaction overall*?
+
+To do this, we averaged satsifaction rates and compared them to the actual delay times. The dataset provides a time in minutes for both arrival and departure delay in minutes for each customer; we grouped by these delay times and calculated satisfaction rate by dividing the number of satisfied passengers by the total number of passengers with that delay time. However, because the times are in minutes, there is a lot of variation in the number of passengers at different times (i.e. 0 minutes has many passengers, but a random number like 107 might only have a handful).
+
+To counteract this, we added a noise filter that divides delay times into ranges (0 - 10 minutes, etc.). Satisfaction rates are then averaged over that range, giving a clearer picture of actual satisfaction rates. We also treated delays above 200 as outliers, as there simply aren't enough passengers at these times to get a significant average.
+
+Slide the noise filter below to adjust the ranges:
+
+
+```{ojs}
+//| echo: false
+viewof delay_noise = slider({
+  min: 10,
+  max: 50,
+  step: 5,
+  value: 10,
+  title: "Delay Noise Filter",
+  description:
+    "Quantizes delay into ranges (larger values = larger range to average over)"
+})
+```
+
+```{ojs}
+//| echo: false
+delay_chart
+```
+
+
+Overall, we do see a decline in satisfaction rates as delay time increases. Depending on the size of the noise filter, we see the steepest dropoff in satisfaction from 0 to around 40 or 50 minutes, in both arrival and departure delay.
+
+At higher delays (above ~ 80 minutes), the graph begins to get noisy with steep fluctations in satisfaction. We can see, however, that this is explained by lower numbers of passengers at these times. At higher noise filter values (> 20), the rates begin to flatten out at the end, suggesting that delays above 40 - 50 minutes have less of a reduction effect on satisfaction.
+
+**What can airlines take away from this?** The greatest impact on satisfaction rates happens when delay times are between 0 and 40 - 50 minutes. While delays longer than this also have a negative effect on satisfaction, it is far less drastic. 
+
+It's possible that once a passenger has been delayed long enough, further time spent waiting won't affect their satisfaction as much-- a 1 hour delay is just as a annoying 2 hour one because from the perspective of the passenger, they're both too long. Furthermore, as delay times get higher we start to look at more edge cases-- flights that are grounded due to weather, for instance, or equipment failure. While still frustrating, these are more understandable causes for delays than say runway or gate traffic.
+
+Airlines, then, could do well to focus their attention on minimizing delays under the 40 - 50 minute mark. This is where the biggest improvement on customer satisfaction can be made-- flights that are delayed further might have extenuating cases, and tend to reduce satisfaction at a much lesser rate.
+
+
+## Pandemic and its negative impact on airline: The up and down of aviation industry
+
+Let's take a closer look into 2020 and how the global pandemic began to impact the aviation industry. Using data obtained from the Bureau of Transportation Statistics, below you can explore the operations of top US Airlines throughout the beginning of 2020. 
+
+::: {layout.ncol=2}
+```{ojs}
+//| echo: false
+viewof carrier = select({
+  options: carrier_options,
+  placeholder: "Search carriers..."
+})
+```
+
+```{ojs}
+//| echo: false
+viewof airport = select({
+  options: airport_options
+})
+```
+:::
+
+```{ojs}
+//| echo: false
+mb_chart
+```
+
+Although it may not be true for all airlines at all airports, while exploring the data set above you may begin to see a trend appear - significant fluctuations from March to June. Specifically looking at a high income Airline like Delta Airlines, at many of the airports it services there were huge dropoffs in the month of March, then an increase in April. These types of general observations helped us to realize COVID-19 did have an impact on the aviation industry and we dove into more data to find out what kind of impact that was.
+
+#### Airline Traffic & COVID-19
+
+To more closely define the relationship between COVID-19 and aviation traffic during, we will examine data obtained from TSA. This data contains the total passenger throughput measured through passengers that go through screening in airports in the United States. We will use this comparison to represent airline traffic. The dates in the 2019 line on the visualization are exact same dates as ones used for the 2020 line. On the y-axis is the number of passengers that have passed through TSA's security screening.
+
+
+```{ojs}
+//| echo: false
+throughput_chart
+```
+
+ From the visualization above, we make a clear difference between the line representing 2019 and the line representing 2020. There was a huge drop between March and April, which was the time in which the outbreak occurred and lockdowns started to take place in major cities around the United States. As summer approached, we see a slow rise in passenger throughput as people travel around the country to either go home for school or take summer plans. Again we see a strong rise around Thanksgiving holidays as people travel again around the country during holiday season; however we then see another fall in passenger throughput almost immediately after.
+
+Overall, we can clearly see that ** it would take for a long period of time for the aviation industry to fully recover ** to even to just pre-pandemic numbers. With the current pandemic still rapidly spreading and nations still in lockdown, airlines should, like mentioned above, target shorter distances and perhaps even better services in response to the pandemic.
+
+Optimistically, with the vaccine developments underway, hopefully the aviation industry would quickly bounce back to its pre-pandemic numbers. In the meantime, it is still important for airlines and passengers to continue to implement and perform safety measures to protect oneself and others.
+
+
+## Conclusion
+The aviation industry has changed tremendously over the last 30 years. With increasing competition in the industry, finding areas of improvement that will maximize overall success is crutial. 
+
+Based on the data we investigated above, airlines can increase their overall income and success through focusing on their customer satisfaction. 
+
+
+In terms of customer satisfaction, there are definite key areas that airlines can focus on improving. Our visualizations show that children and seniors are the least satisfied with flight experience, and loyal customers have better experiences overall. Focusing on accomodations for children and seniors and building customer loyalty can help airlines improve satisfaction across the board.
+
+The data has also shown that longer delays do reduce customer satisfaction. In particular, business passengers (both those flying in business class and/or for the purpose of business) are the least satisfied by arrival and departure times, compared both with non-business passengers and with satisfaction rates in other categories. In terms of length, delays have the biggest effect on customer satisfaction in the interval between 0 and around 50 minutes. Airlines should focus on both reducing delays for business passengers and improving delays when they are less than an hour.
+
+
+
+Understanding the customer's reason for travel and keeping delays to a minimum will increase loyalty and success. With the majority of flights being under 1000 miles, focusing on making these flights as smooth as possible will increase the satisfaction of the largest group of customers. In relation to COVID-19, the airlines that have diverse flight purpose (ie. consumer travel and cargo shipment) have been able to maintain a profit during these unprecedented times.
+
+# Appendix {.hidden}
+
+```{ojs}
+//| echo: false
+d3 = require("d3", "d3@5", "d3@6")
+```
+
+```{ojs}
+//| echo: false
+import { select, slider } from "@jashkenas/inputs"
+```
+
+#### Finance Chart Data
+
+```{ojs}
+//| echo: false
+raw_data = d3.csvParse(
+  await FileAttachment("airline_expense_revenue.csv").text(),
+  d3.autoType
+)
+```
+
+```{ojs}
+//| echo: false
+select_data = raw_data.map(d => ({
+  income: +d["NET_INCOME"],
+  airline: d["CARRIER_NAME"],
+  revenue: d["OP_REVENUES"],
+  year: d["YEAR"],
+  airCode: d.CARRIER
+}))
+```
+
+```{ojs}
+//| echo: false
+legend_finance = svg => {
+  const g = svg
+    .attr("transform", `translate(${width},0)`)
+    .attr("text-anchor", "end")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", 10)
+    .selectAll("g")
+    .data(color.domain())
+    .join("g")
+    .attr("transform", (d, i) => `translate(0,${i * 20})`);
+
+  g.append("rect")
+    .attr("x", -19)
+    .attr("width", 19)
+    .attr("height", 19)
+    .attr("fill", color);
+
+  g.append("text")
+    .attr("x", -24)
+    .attr("y", 9.5)
+    .attr("dy", "0.35em")
+    .text(d => d);
+}
+```
+
+```{ojs}
+//| echo: false
+tooltip = d3
+  .select('body')
+  .append('div')
+  .attr('class', 'd3-tooltip')
+  .style('position', 'absolute')
+  .style('z-index', '10')
+  .style('visibility', 'hidden')
+  .style('padding', '10px')
+  .style('background', 'rgba(0,0,0,0.6)')
+  .style('border-radius', '4px')
+  .style('color', '#fff')
+  .text('a simple tooltip')
+```
+
+```{ojs}
+//| echo: false
+color = d3.scaleOrdinal().range(["#98abc5", "#8a89a6"])
+```
+
+```{ojs}
+//| echo: false
+margin = ({ top: 10, right: 10, bottom: 40, left: 40 })
+```
+
+```{ojs}
+//| echo: false
+keys = ["revenue", "income"]
+```
+
+```{ojs}
+//| echo: false
+finance_chart.update(options_select, yearSlider, sort_by)
+```
+
+
+Customer Satisfaction by distance in various categories
+
+
+```{ojs}
+//| echo: false
+import { dtype, chart5_Color } with {
+  dataType
+} from "@jinson/final-project-satisfaction-by-category"
+```
+
+### Delay Imports
+
+```{ojs}
+//| echo: false
+import { delay_chart } with {
+  delay_noise
+} from "@kylerws/474-final-project-delay-chart"
+```
+
+```{ojs}
+//| echo: false
+delay_chart.update(delay_noise)
+```
+
+### Customer Satisfaction Imports
+
+```{ojs}
+//| echo: false
+import { chart_satis, filters } with {
+  group
+} from "@kylerws/474-final-project-charts"
+```
+
+```{ojs}
+//| echo: false
+chart_satis.update(group)
+```
+
+### Passenger Throughput Imports
+
+```{ojs}
+//| echo: false
+import { throughput_chart, legend_covid } from "@kevinko/final-deliverable-viz"
+```
+
+```{=html}
+
+<style>
+.grid-lines line {
+  stroke: gray;
+  stroke-opacity: 0.2;
+}
+</style>
+```
+
+### Airline Operations Imports
+
+```{ojs}
+//| echo: false
+import { mb_chart, flightsByCarrier, carrier_options } with {
+  airport,
+  carrier
+} from "@uw-info474/monthly-airline-operations-by-airport-from-january-august"
+```
+
+```{ojs}
+//| echo: false
+carrier_flights = flightsByCarrier.get(carrier)
+```
+
+```{ojs}
+//| echo: false
+airport_options = [
+  ...d3.group(d3.group(carrier_flights, d => d.airport)).keys()
+]
+```
+

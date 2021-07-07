@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="" xml:lang=""><head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+  <title>Final Project: What makes an airline succesful?</title>
+  <style>
+    code{white-space: pre-wrap;}
+    span.smallcaps{font-variant: small-caps;}
+    span.underline{text-decoration: underline;}
+    div.column{display: inline-block; vertical-align: top; width: 50%;}
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+    ul.task-list{list-style: none;}
+    pre > code.sourceCode { white-space: pre; position: relative; }
+    pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+    pre > code.sourceCode > span:empty { height: 1.2em; }
+    .sourceCode { overflow: visible; }
+    code.sourceCode > span { color: inherit; text-decoration: inherit; }
+    div.sourceCode { margin: 1em 0; }
+    pre.sourceCode { margin: 0; }
+    @media screen {
+    div.sourceCode { overflow: auto; }
+    }
+    @media print {
+    pre > code.sourceCode { white-space: pre-wrap; }
+    pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+    }
+    pre.numberSource code
+      { counter-reset: source-line 0; }
+    pre.numberSource code > span
+      { position: relative; left: -4em; counter-increment: source-line; }
+    pre.numberSource code > span > a:first-child::before
+      { content: counter(source-line);
+        position: relative; left: -1em; text-align: right; vertical-align: baseline;
+        border: none; display: inline-block;
+        -webkit-touch-callout: none; -webkit-user-select: none;
+        -khtml-user-select: none; -moz-user-select: none;
+        -ms-user-select: none; user-select: none;
+        padding: 0 4px; width: 4em;
+        color: #aaaaaa;
+      }
+    pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+    div.sourceCode
+      {   }
+    @media screen {
+    pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+    }
+    code span.al { color: #ad0000; } /* Alert */
+    code span.an { color: #5e5e5e; } /* Annotation */
+    code span.at { } /* Attribute */
+    code span.bn { color: #ad0000; } /* BaseN */
+    code span.bu { } /* BuiltIn */
+    code span.cf { color: #007ba5; } /* ControlFlow */
+    code span.ch { color: #20794d; } /* Char */
+    code span.cn { color: #8f5902; } /* Constant */
+    code span.co { color: #5e5e5e; } /* Comment */
+    code span.cv { color: #5e5e5e; font-style: italic; } /* CommentVar */
+    code span.do { color: #5e5e5e; font-style: italic; } /* Documentation */
+    code span.dt { color: #ad0000; } /* DataType */
+    code span.dv { color: #ad0000; } /* DecVal */
+    code span.er { color: #ad0000; } /* Error */
+    code span.ex { } /* Extension */
+    code span.fl { color: #ad0000; } /* Float */
+    code span.fu { color: #4758ab; } /* Function */
+    code span.im { } /* Import */
+    code span.in { color: #5e5e5e; } /* Information */
+    code span.kw { color: #007ba5; } /* Keyword */
+    code span.op { color: #5e5e5e; } /* Operator */
+    code span.ot { color: #007ba5; } /* Other */
+    code span.pp { color: #ad0000; } /* Preprocessor */
+    code span.sc { color: #5e5e5e; } /* SpecialChar */
+    code span.ss { color: #20794d; } /* SpecialString */
+    code span.st { color: #20794d; } /* String */
+    code span.va { color: #111111; } /* Variable */
+    code span.vs { color: #20794d; } /* VerbatimString */
+    code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
+  </style>
+
+  <!--[if lt IE 9]>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv-printshiv.min.js"></script>
+  <![endif]-->
+  <script src="airline-success_files/libs/quarto-html/quarto.js"></script>
+  <script src="airline-success_files/libs/quarto-html/popper.min.js"></script>
+  <script src="airline-success_files/libs/quarto-html/tippy.umd.min.js"></script>
+  <script src="airline-success_files/libs/quarto-html/clipboard.min.js"></script>
+  <script src="airline-success_files/libs/quarto-html/anchor.min.js"></script>
+  <script src="airline-success_files/libs/quarto-html/quarto-html.js"></script>
+  <link href="airline-success_files/libs/quarto-html/tippy.css" rel="stylesheet">
+  <link href="airline-success_files/libs/quarto-html/quarto-css-variables.css" rel="stylesheet">
+  <script src="airline-success_files/libs/bootstrap/bootstrap.min.js"></script>
+  <link href="airline-success_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+  <link href="airline-success_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet">
+  <script type="module" src="airline-success_files/libs/quarto-ojs/ojs-bundle.js"></script>
+  <link href="airline-success_files/libs/quarto-ojs/quarto-ojs.css" rel="stylesheet">
+</head>
+<body>
+<div id="quarto-content" class="container-fluid page-layout-article">
+<div class="row">
+<div id="quarto-toc-sidebar" class="col col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-toc order-last"><nav id="TOC" role="doc-toc">
+<h2 id="toc-title">Table of contents</h2>
+<ul>
+<li><a href="#when-it-all-first-started" class="nav-link active" data-scroll-target="#when-it-all-first-started">When it all first started</a></li>
+<li><a href="#which-airline-is-doing-well" class="nav-link" data-scroll-target="#which-airline-is-doing-well">Which airline is doing well?</a>
+<ul class="collapse">
+<li><a href="#measures-of-success" class="nav-link" data-scroll-target="#measures-of-success">Measures of success?</a></li>
+<li><a href="#airline-and-finance" class="nav-link" data-scroll-target="#airline-and-finance">Airline and finance</a></li>
+</ul></li>
+<li><a href="#customer-satisfaction" class="nav-link" data-scroll-target="#customer-satisfaction">Customer Satisfaction</a>
+<ul class="collapse">
+<li><a href="#customer-satisfaction-by-flight-distance" class="nav-link" data-scroll-target="#customer-satisfaction-by-flight-distance">Customer Satisfaction by Flight Distance</a></li>
+<li><a href="#satisfaction-by-customer-traits" class="nav-link" data-scroll-target="#satisfaction-by-customer-traits">Satisfaction by Customer Traits</a></li>
+<li><a href="#how-do-arrival-and-departure-delays-affect-satisfaction" class="nav-link" data-scroll-target="#how-do-arrival-and-departure-delays-affect-satisfaction">How do Arrival and Departure Delays Affect Satisfaction?</a></li>
+</ul></li>
+<li><a href="#pandemic-and-its-negative-impact-on-airline-the-up-and-down-of-aviation-industry" class="nav-link" data-scroll-target="#pandemic-and-its-negative-impact-on-airline-the-up-and-down-of-aviation-industry">Pandemic and its negative impact on airline: The up and down of aviation industry</a></li>
+<li><a href="#conclusion" class="nav-link" data-scroll-target="#conclusion">Conclusion</a></li>
+<li><a href="#appendix" class="nav-link" data-scroll-target="#appendix">Appendix</a>
+<ul class="collapse">
+<li><a href="#delay-imports" class="nav-link" data-scroll-target="#delay-imports">Delay Imports</a></li>
+<li><a href="#customer-satisfaction-imports" class="nav-link" data-scroll-target="#customer-satisfaction-imports">Customer Satisfaction Imports</a></li>
+<li><a href="#passenger-throughput-imports" class="nav-link" data-scroll-target="#passenger-throughput-imports">Passenger Throughput Imports</a></li>
+<li><a href="#airline-operations-imports" class="nav-link" data-scroll-target="#airline-operations-imports">Airline Operations Imports</a></li>
+</ul></li>
+</ul>
+</nav></div>
+<div class="col mx-auto col-sm-12 col-md-9 col-lg-7">
+<main>
+<header id="title-block-header">
+<h1 class="title display-7">Final Project: What makes an airline succesful?</h1>
+</header>
+
+<section id="when-it-all-first-started" class="level3">
+<h3 class="anchored" data-anchor-id="when-it-all-first-started">When it all first started</h3>
+<p>A few hundreds of years ago, no man ever think that they could fly or concure the sky. But it all changed when the Wright Brothers did the unthinkable, creating a machine that enable human to fly.</p>
+<p>From then on, the aviation industry has never ceased to stop growing. Today, Boeing and Airbus dominate the airplane manufacturing industry, creating durable, reliable, and fuel-efficient aircrafts. Today, hundreds of different airlines fly above our heads everyday, allowing travel between countries to be easier than ever.</p>
+<p>As a team, we gathered data from different sources - ________ - to take a look into what makes an airline company successful. We first narrow our scope to airlines in the United States and analyze the income and revenue. We then zone in into customer experience ratings and travel distance to uncover the relationship between multiple different services and factors in air travel.</p>
+<p>Perhaps the most discussed topic in 2020, we then take a look into COVID-19 and its impact on the aviation industry as a whole.</p>
+</section>
+<section id="which-airline-is-doing-well" class="level2">
+<h2 class="anchored" data-anchor-id="which-airline-is-doing-well">Which airline is doing well?</h2>
+<section id="measures-of-success" class="level3">
+<h3 class="anchored" data-anchor-id="measures-of-success">Measures of success?</h3>
+<p>Success can be measured in many ways but we will mainly focus on these three areas: - How much did the company make in total - Revenue? - How much did the company actually earn in net income?</p>
+<p>With the revenue, it measures how much of an impact - the market share that company took from the total customers and money that are circulating around. This shows how big a company is in the aviation industry.</p>
+<p>However, just those indicators are not enough the measure success. Big companies could be failing due to lack of good management, so a “net income” would determine out of all those, which airlines are the best at managing expenses and the corporate in general.</p>
+</section>
+<section id="airline-and-finance" class="level3">
+<h3 class="anchored" data-anchor-id="airline-and-finance">Airline and finance</h3>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell quarto-layout-cell" data-echo="false" style="flex-basis: 33.3%;justify-content: center;">
+<div class="sourceCode hidden" id="cb1"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>viewof options_select <span class="op">=</span> <span class="fu">select</span>({</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Select Range of Airlines"</span><span class="op">,</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">options</span><span class="op">:</span> [<span class="st">"All"</span><span class="op">,</span> <span class="st">"Top 1-20"</span><span class="op">,</span> <span class="st">"Mid 21-30"</span><span class="op">,</span> <span class="st">"Bot 31-50"</span>]</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-1">
+
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell" data-echo="false" style="flex-basis: 33.3%;justify-content: center;">
+<div class="sourceCode hidden" id="cb2"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>viewof sort_by <span class="op">=</span> <span class="fu">select</span>({</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Sort by"</span><span class="op">,</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">options</span><span class="op">:</span> [<span class="st">"Revenue"</span><span class="op">,</span> <span class="st">"Income"</span>]</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-2">
+
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell" data-echo="false" style="flex-basis: 33.3%;justify-content: center;">
+<div class="sourceCode hidden" id="cb3"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>viewof yearSlider <span class="op">=</span> <span class="fu">slider</span>({</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Select Year Slider"</span><span class="op">,</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min</span><span class="op">:</span> <span class="dv">1990</span><span class="op">,</span></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">max</span><span class="op">:</span> <span class="dv">2020</span><span class="op">,</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="dv">1</span><span class="op">,</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">2020</span><span class="op">,</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">description</span><span class="op">:</span> <span class="st">"Use the slider to select year"</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-3">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell">
+<div class="sourceCode hidden" id="cb4"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>finance_chart <span class="op">=</span> {</span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> height <span class="op">=</span> <span class="dv">500</span><span class="op">;</span></span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> filter <span class="op">=</span> {</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>    <span class="dt">All</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">51</span>]<span class="op">,</span></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Top 1-20"</span><span class="op">:</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">20</span>]<span class="op">,</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Mid 21-30"</span><span class="op">:</span> [<span class="dv">21</span><span class="op">,</span> <span class="dv">30</span>]<span class="op">,</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Bot 31-50"</span><span class="op">:</span> [<span class="dv">31</span><span class="op">,</span> <span class="dv">51</span>]</span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> svg <span class="op">=</span> d3<span class="op">.</span><span class="fu">create</span>(<span class="st">"svg"</span>)<span class="op">.</span><span class="fu">attr</span>(<span class="st">"viewBox"</span><span class="op">,</span> [<span class="dv">0</span><span class="op">,</span> <span class="dv">0</span><span class="op">,</span> width<span class="op">,</span> height])<span class="op">;</span></span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  svg<span class="op">.</span><span class="fu">node</span>()<span class="op">.</span><span class="at">update</span> <span class="op">=</span> (metrics<span class="op">,</span> inputYear<span class="op">,</span> opt) <span class="kw">=&gt;</span> {</span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>    svg<span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"*"</span>)<span class="op">.</span><span class="fu">remove</span>()<span class="op">;</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> filt_year <span class="op">=</span> select_data<span class="op">.</span><span class="fu">filter</span>(d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">year</span> <span class="op">==</span> inputYear)<span class="op">;</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>    <span class="kw">let</span> data_grouped <span class="op">=</span> []<span class="op">;</span></span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>    filt_year<span class="op">.</span><span class="fu">reduce</span>(<span class="kw">function</span>(res<span class="op">,</span> value) {</span>
+<span id="cb4-16"><a href="#cb4-16" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (<span class="op">!</span>res[value<span class="op">.</span><span class="at">airline</span>]) {</span>
+<span id="cb4-17"><a href="#cb4-17" aria-hidden="true" tabindex="-1"></a>        res[value<span class="op">.</span><span class="at">airline</span>] <span class="op">=</span> {</span>
+<span id="cb4-18"><a href="#cb4-18" aria-hidden="true" tabindex="-1"></a>          <span class="dt">airline</span><span class="op">:</span> value<span class="op">.</span><span class="at">airline</span><span class="op">,</span></span>
+<span id="cb4-19"><a href="#cb4-19" aria-hidden="true" tabindex="-1"></a>          <span class="dt">income</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb4-20"><a href="#cb4-20" aria-hidden="true" tabindex="-1"></a>          <span class="dt">revenue</span><span class="op">:</span> <span class="dv">0</span><span class="op">,</span></span>
+<span id="cb4-21"><a href="#cb4-21" aria-hidden="true" tabindex="-1"></a>          <span class="dt">code</span><span class="op">:</span> value<span class="op">.</span><span class="at">airCode</span><span class="op">,</span></span>
+<span id="cb4-22"><a href="#cb4-22" aria-hidden="true" tabindex="-1"></a>          <span class="dt">year</span><span class="op">:</span> value<span class="op">.</span><span class="at">year</span></span>
+<span id="cb4-23"><a href="#cb4-23" aria-hidden="true" tabindex="-1"></a>        }<span class="op">;</span></span>
+<span id="cb4-24"><a href="#cb4-24" aria-hidden="true" tabindex="-1"></a>        data_grouped<span class="op">.</span><span class="fu">push</span>(res[value<span class="op">.</span><span class="at">airline</span>])<span class="op">;</span></span>
+<span id="cb4-25"><a href="#cb4-25" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-26"><a href="#cb4-26" aria-hidden="true" tabindex="-1"></a>      res[value<span class="op">.</span><span class="at">airline</span>]<span class="op">.</span><span class="at">income</span> <span class="op">+=</span> value<span class="op">.</span><span class="at">income</span><span class="op">;</span></span>
+<span id="cb4-27"><a href="#cb4-27" aria-hidden="true" tabindex="-1"></a>      res[value<span class="op">.</span><span class="at">airline</span>]<span class="op">.</span><span class="at">revenue</span> <span class="op">+=</span> value<span class="op">.</span><span class="at">revenue</span><span class="op">;</span></span>
+<span id="cb4-28"><a href="#cb4-28" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> res<span class="op">;</span></span>
+<span id="cb4-29"><a href="#cb4-29" aria-hidden="true" tabindex="-1"></a>    }<span class="op">,</span> {})<span class="op">;</span></span>
+<span id="cb4-30"><a href="#cb4-30" aria-hidden="true" tabindex="-1"></a>    data_grouped <span class="op">=</span> data_grouped<span class="op">.</span><span class="fu">sort</span>(<span class="kw">function</span>(a<span class="op">,</span> b) {</span>
+<span id="cb4-31"><a href="#cb4-31" aria-hidden="true" tabindex="-1"></a>      <span class="cf">if</span> (opt <span class="op">==</span> <span class="st">"Revenue"</span>) {</span>
+<span id="cb4-32"><a href="#cb4-32" aria-hidden="true" tabindex="-1"></a>        <span class="cf">return</span> b<span class="op">.</span><span class="at">revenue</span> <span class="op">-</span> a<span class="op">.</span><span class="at">revenue</span><span class="op">;</span></span>
+<span id="cb4-33"><a href="#cb4-33" aria-hidden="true" tabindex="-1"></a>      }</span>
+<span id="cb4-34"><a href="#cb4-34" aria-hidden="true" tabindex="-1"></a>      <span class="cf">return</span> b<span class="op">.</span><span class="at">income</span> <span class="op">-</span> a<span class="op">.</span><span class="at">income</span><span class="op">;</span></span>
+<span id="cb4-35"><a href="#cb4-35" aria-hidden="true" tabindex="-1"></a>    })<span class="op">;</span></span>
+<span id="cb4-36"><a href="#cb4-36" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-37"><a href="#cb4-37" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> filt_range <span class="op">=</span> filter[metrics]<span class="op">;</span></span>
+<span id="cb4-38"><a href="#cb4-38" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> filtered_data <span class="op">=</span> data_grouped<span class="op">.</span><span class="fu">slice</span>(filt_range[<span class="dv">0</span>]<span class="op">,</span> filt_range[<span class="dv">1</span>])<span class="op">;</span></span>
+<span id="cb4-39"><a href="#cb4-39" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-40"><a href="#cb4-40" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> x0 <span class="op">=</span> d3</span>
+<span id="cb4-41"><a href="#cb4-41" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">scaleBand</span>()</span>
+<span id="cb4-42"><a href="#cb4-42" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">domain</span>(filtered_data<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> d[<span class="st">"code"</span>]))</span>
+<span id="cb4-43"><a href="#cb4-43" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">rangeRound</span>([margin<span class="op">.</span><span class="at">left</span><span class="op">,</span> width <span class="op">-</span> margin<span class="op">.</span><span class="at">right</span>])</span>
+<span id="cb4-44"><a href="#cb4-44" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">paddingInner</span>(<span class="fl">0.1</span>)<span class="op">;</span></span>
+<span id="cb4-45"><a href="#cb4-45" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-46"><a href="#cb4-46" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> x1 <span class="op">=</span> d3</span>
+<span id="cb4-47"><a href="#cb4-47" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">scaleBand</span>()</span>
+<span id="cb4-48"><a href="#cb4-48" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">domain</span>(keys)</span>
+<span id="cb4-49"><a href="#cb4-49" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">rangeRound</span>([<span class="dv">0</span><span class="op">,</span> x0<span class="op">.</span><span class="fu">bandwidth</span>()])</span>
+<span id="cb4-50"><a href="#cb4-50" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">padding</span>(<span class="fl">0.05</span>)<span class="op">;</span></span>
+<span id="cb4-51"><a href="#cb4-51" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-52"><a href="#cb4-52" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> y <span class="op">=</span> d3</span>
+<span id="cb4-53"><a href="#cb4-53" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">scaleLinear</span>()</span>
+<span id="cb4-54"><a href="#cb4-54" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">domain</span>([</span>
+<span id="cb4-55"><a href="#cb4-55" aria-hidden="true" tabindex="-1"></a>        d3<span class="op">.</span><span class="fu">min</span>(filtered_data<span class="op">,</span> d <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="fu">min</span>(keys<span class="op">,</span> key <span class="kw">=&gt;</span> d[key]))<span class="op">,</span></span>
+<span id="cb4-56"><a href="#cb4-56" aria-hidden="true" tabindex="-1"></a>        d3<span class="op">.</span><span class="fu">max</span>(filtered_data<span class="op">,</span> d <span class="kw">=&gt;</span> d3<span class="op">.</span><span class="fu">max</span>(keys<span class="op">,</span> key <span class="kw">=&gt;</span> d[key]))</span>
+<span id="cb4-57"><a href="#cb4-57" aria-hidden="true" tabindex="-1"></a>      ])</span>
+<span id="cb4-58"><a href="#cb4-58" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">nice</span>()</span>
+<span id="cb4-59"><a href="#cb4-59" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">range</span>([height <span class="op">-</span> margin<span class="op">.</span><span class="at">bottom</span><span class="op">,</span> margin<span class="op">.</span><span class="at">top</span>])<span class="op">;</span></span>
+<span id="cb4-60"><a href="#cb4-60" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-61"><a href="#cb4-61" aria-hidden="true" tabindex="-1"></a>    svg</span>
+<span id="cb4-62"><a href="#cb4-62" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)</span>
+<span id="cb4-63"><a href="#cb4-63" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"g"</span>)</span>
+<span id="cb4-64"><a href="#cb4-64" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">data</span>(filtered_data)</span>
+<span id="cb4-65"><a href="#cb4-65" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">join</span>(<span class="st">"g"</span>)</span>
+<span id="cb4-66"><a href="#cb4-66" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="vs">`translate(</span><span class="sc">${</span><span class="fu">x0</span>(d<span class="op">.</span><span class="at">code</span>)<span class="sc">}</span><span class="vs">,0)`</span>)</span>
+<span id="cb4-67"><a href="#cb4-67" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"rect"</span>)</span>
+<span id="cb4-68"><a href="#cb4-68" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">data</span>(d <span class="kw">=&gt;</span> keys<span class="op">.</span><span class="fu">map</span>(key <span class="kw">=&gt;</span> ({ key<span class="op">,</span> <span class="dt">value</span><span class="op">:</span> d[key]<span class="op">,</span> <span class="dt">airline</span><span class="op">:</span> d<span class="op">.</span><span class="at">airline</span> })))</span>
+<span id="cb4-69"><a href="#cb4-69" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">join</span>(<span class="st">"rect"</span>)</span>
+<span id="cb4-70"><a href="#cb4-70" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">x1</span>(d<span class="op">.</span><span class="at">key</span>))</span>
+<span id="cb4-71"><a href="#cb4-71" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> d <span class="kw">=&gt;</span> {</span>
+<span id="cb4-72"><a href="#cb4-72" aria-hidden="true" tabindex="-1"></a>        <span class="cf">if</span> (d<span class="op">.</span><span class="at">value</span> <span class="op">&lt;</span> <span class="dv">0</span>) {</span>
+<span id="cb4-73"><a href="#cb4-73" aria-hidden="true" tabindex="-1"></a>          <span class="cf">return</span> <span class="fu">y</span>(<span class="dv">0</span>)<span class="op">;</span></span>
+<span id="cb4-74"><a href="#cb4-74" aria-hidden="true" tabindex="-1"></a>        } <span class="cf">else</span> {</span>
+<span id="cb4-75"><a href="#cb4-75" aria-hidden="true" tabindex="-1"></a>          <span class="cf">return</span> <span class="fu">y</span>(d<span class="op">.</span><span class="at">value</span>)<span class="op">;</span></span>
+<span id="cb4-76"><a href="#cb4-76" aria-hidden="true" tabindex="-1"></a>        }</span>
+<span id="cb4-77"><a href="#cb4-77" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb4-78"><a href="#cb4-78" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"width"</span><span class="op">,</span> x1<span class="op">.</span><span class="fu">bandwidth</span>())</span>
+<span id="cb4-79"><a href="#cb4-79" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"height"</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="bu">Math</span><span class="op">.</span><span class="fu">abs</span>(<span class="fu">y</span>(<span class="dv">0</span>) <span class="op">-</span> <span class="fu">y</span>(d<span class="op">.</span><span class="at">value</span>)))</span>
+<span id="cb4-80"><a href="#cb4-80" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">color</span>(d<span class="op">.</span><span class="at">key</span>))</span>
+<span id="cb4-81"><a href="#cb4-81" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">on</span>(<span class="st">'mouseenter'</span><span class="op">,</span> <span class="kw">function</span>(e<span class="op">,</span> d<span class="op">,</span> i) {</span>
+<span id="cb4-82"><a href="#cb4-82" aria-hidden="true" tabindex="-1"></a>        tooltip</span>
+<span id="cb4-83"><a href="#cb4-83" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">html</span>(</span>
+<span id="cb4-84"><a href="#cb4-84" aria-hidden="true" tabindex="-1"></a>            <span class="vs">`&lt;div&gt;</span><span class="sc">${</span>d<span class="op">.</span><span class="at">airline</span><span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;div&gt;</span><span class="sc">${</span>d<span class="op">.</span><span class="at">key</span><span class="sc">}</span><span class="vs">&lt;/div&gt;&lt;div&gt;</span><span class="sc">${</span><span class="bu">Math</span><span class="op">.</span><span class="fu">round</span>(</span>
+<span id="cb4-85"><a href="#cb4-85" aria-hidden="true" tabindex="-1"></a>              d<span class="op">.</span><span class="at">value</span></span>
+<span id="cb4-86"><a href="#cb4-86" aria-hidden="true" tabindex="-1"></a>            )<span class="sc">}</span><span class="vs">&lt;/div&gt;`</span></span>
+<span id="cb4-87"><a href="#cb4-87" aria-hidden="true" tabindex="-1"></a>          )</span>
+<span id="cb4-88"><a href="#cb4-88" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">style</span>(<span class="st">'visibility'</span><span class="op">,</span> <span class="st">'visible'</span>)<span class="op">;</span></span>
+<span id="cb4-89"><a href="#cb4-89" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-90"><a href="#cb4-90" aria-hidden="true" tabindex="-1"></a>        d3<span class="op">.</span><span class="fu">select</span>(<span class="kw">this</span>)<span class="op">.</span><span class="fu">attr</span>(<span class="st">'fill'</span><span class="op">,</span> <span class="st">'#eec42d'</span>)<span class="op">;</span></span>
+<span id="cb4-91"><a href="#cb4-91" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb4-92"><a href="#cb4-92" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">on</span>(<span class="st">'mousemove'</span><span class="op">,</span> <span class="kw">function</span>(e) {</span>
+<span id="cb4-93"><a href="#cb4-93" aria-hidden="true" tabindex="-1"></a>        <span class="kw">const</span> side_padding <span class="op">=</span> <span class="dv">3</span><span class="op">;</span></span>
+<span id="cb4-94"><a href="#cb4-94" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> x <span class="op">=</span> e<span class="op">.</span><span class="at">pageX</span> <span class="op">-</span> <span class="dv">50</span><span class="op">;</span></span>
+<span id="cb4-95"><a href="#cb4-95" aria-hidden="true" tabindex="-1"></a>        <span class="kw">let</span> y <span class="op">=</span> e<span class="op">.</span><span class="at">pageY</span> <span class="op">-</span> <span class="dv">180</span><span class="op">;</span></span>
+<span id="cb4-96"><a href="#cb4-96" aria-hidden="true" tabindex="-1"></a>        tooltip<span class="op">.</span><span class="fu">style</span>(<span class="st">'top'</span><span class="op">,</span> y <span class="op">+</span> <span class="dv">10</span> <span class="op">+</span> <span class="st">'px'</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">'left'</span><span class="op">,</span> x <span class="op">+</span> <span class="dv">10</span> <span class="op">+</span> <span class="st">'px'</span>)<span class="op">;</span></span>
+<span id="cb4-97"><a href="#cb4-97" aria-hidden="true" tabindex="-1"></a>      })</span>
+<span id="cb4-98"><a href="#cb4-98" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">on</span>(<span class="st">'mouseout'</span><span class="op">,</span> <span class="kw">function</span>() {</span>
+<span id="cb4-99"><a href="#cb4-99" aria-hidden="true" tabindex="-1"></a>        tooltip<span class="op">.</span><span class="fu">html</span>(<span class="vs">``</span>)<span class="op">.</span><span class="fu">style</span>(<span class="st">'visibility'</span><span class="op">,</span> <span class="st">'hidden'</span>)<span class="op">;</span></span>
+<span id="cb4-100"><a href="#cb4-100" aria-hidden="true" tabindex="-1"></a>        d3<span class="op">.</span><span class="fu">select</span>(<span class="kw">this</span>)</span>
+<span id="cb4-101"><a href="#cb4-101" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">transition</span>()</span>
+<span id="cb4-102"><a href="#cb4-102" aria-hidden="true" tabindex="-1"></a>          <span class="op">.</span><span class="fu">attr</span>(<span class="st">'fill'</span><span class="op">,</span> d <span class="kw">=&gt;</span> <span class="fu">color</span>(d<span class="op">.</span><span class="at">key</span>))<span class="op">;</span></span>
+<span id="cb4-103"><a href="#cb4-103" aria-hidden="true" tabindex="-1"></a>      })<span class="op">;</span></span>
+<span id="cb4-104"><a href="#cb4-104" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-105"><a href="#cb4-105" aria-hidden="true" tabindex="-1"></a>    <span class="co">// update xaxis too</span></span>
+<span id="cb4-106"><a href="#cb4-106" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-107"><a href="#cb4-107" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> xAxis <span class="op">=</span> g <span class="kw">=&gt;</span></span>
+<span id="cb4-108"><a href="#cb4-108" aria-hidden="true" tabindex="-1"></a>      g</span>
+<span id="cb4-109"><a href="#cb4-109" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(0,</span><span class="sc">${</span>height <span class="op">-</span> margin<span class="op">.</span><span class="at">bottom</span><span class="sc">}</span><span class="vs">)`</span>)</span>
+<span id="cb4-110"><a href="#cb4-110" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisBottom</span>(x0)<span class="op">.</span><span class="fu">tickSizeOuter</span>(<span class="dv">0</span>))</span>
+<span id="cb4-111"><a href="#cb4-111" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">call</span>(g <span class="kw">=&gt;</span> g<span class="op">.</span><span class="fu">select</span>(<span class="st">".domain"</span>)<span class="op">.</span><span class="fu">remove</span>())<span class="op">;</span></span>
+<span id="cb4-112"><a href="#cb4-112" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-113"><a href="#cb4-113" aria-hidden="true" tabindex="-1"></a>    <span class="co">// update yaxis too</span></span>
+<span id="cb4-114"><a href="#cb4-114" aria-hidden="true" tabindex="-1"></a>    <span class="kw">const</span> yAxis <span class="op">=</span> g <span class="kw">=&gt;</span></span>
+<span id="cb4-115"><a href="#cb4-115" aria-hidden="true" tabindex="-1"></a>      g</span>
+<span id="cb4-116"><a href="#cb4-116" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>margin<span class="op">.</span><span class="at">left</span><span class="sc">}</span><span class="vs">,0)`</span>)</span>
+<span id="cb4-117"><a href="#cb4-117" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">call</span>(d3<span class="op">.</span><span class="fu">axisLeft</span>(y)<span class="op">.</span><span class="fu">ticks</span>(<span class="kw">null</span><span class="op">,</span> <span class="st">"s"</span>))</span>
+<span id="cb4-118"><a href="#cb4-118" aria-hidden="true" tabindex="-1"></a>        <span class="op">.</span><span class="fu">call</span>(g <span class="kw">=&gt;</span> g<span class="op">.</span><span class="fu">select</span>(<span class="st">".domain"</span>)<span class="op">.</span><span class="fu">remove</span>())<span class="op">;</span></span>
+<span id="cb4-119"><a href="#cb4-119" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-120"><a href="#cb4-120" aria-hidden="true" tabindex="-1"></a>    svg</span>
+<span id="cb4-121"><a href="#cb4-121" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb4-122"><a href="#cb4-122" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">text</span>(metrics <span class="op">+</span> <span class="st">" Airlines Income and Revenue ($) in "</span> <span class="op">+</span> yearSlider)</span>
+<span id="cb4-123"><a href="#cb4-123" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="st">"translate(200, 30)"</span>)</span>
+<span id="cb4-124"><a href="#cb4-124" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"font-weight"</span><span class="op">,</span> <span class="st">"bold"</span>)</span>
+<span id="cb4-125"><a href="#cb4-125" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"font-size"</span><span class="op">,</span> <span class="st">"18px"</span>)<span class="op">;</span></span>
+<span id="cb4-126"><a href="#cb4-126" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-127"><a href="#cb4-127" aria-hidden="true" tabindex="-1"></a>    svg</span>
+<span id="cb4-128"><a href="#cb4-128" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb4-129"><a href="#cb4-129" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(</span>
+<span id="cb4-130"><a href="#cb4-130" aria-hidden="true" tabindex="-1"></a>        <span class="st">"transform"</span><span class="op">,</span></span>
+<span id="cb4-131"><a href="#cb4-131" aria-hidden="true" tabindex="-1"></a>        <span class="vs">`translate(</span><span class="sc">${</span>margin<span class="op">.</span><span class="at">left</span> <span class="op">+</span></span>
+<span id="cb4-132"><a href="#cb4-132" aria-hidden="true" tabindex="-1"></a>          (x0<span class="op">.</span><span class="fu">range</span>()[<span class="dv">1</span>] <span class="op">-</span> x0<span class="op">.</span><span class="fu">range</span>()[<span class="dv">0</span>]) <span class="op">/</span> <span class="dv">2</span><span class="sc">}</span><span class="vs">,</span><span class="sc">${</span>height <span class="op">-</span> <span class="dv">3</span><span class="sc">}</span><span class="vs">)`</span></span>
+<span id="cb4-133"><a href="#cb4-133" aria-hidden="true" tabindex="-1"></a>      )</span>
+<span id="cb4-134"><a href="#cb4-134" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">style</span>(<span class="st">"text-anchor"</span><span class="op">,</span> <span class="st">"middle"</span>)</span>
+<span id="cb4-135"><a href="#cb4-135" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">attr</span>(<span class="st">"font-size"</span><span class="op">,</span> <span class="st">"12px"</span>)</span>
+<span id="cb4-136"><a href="#cb4-136" aria-hidden="true" tabindex="-1"></a>      <span class="op">.</span><span class="fu">text</span>(<span class="st">"Airline code"</span>)<span class="op">;</span></span>
+<span id="cb4-137"><a href="#cb4-137" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-138"><a href="#cb4-138" aria-hidden="true" tabindex="-1"></a>    svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)<span class="op">.</span><span class="fu">call</span>(xAxis)<span class="op">;</span></span>
+<span id="cb4-139"><a href="#cb4-139" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-140"><a href="#cb4-140" aria-hidden="true" tabindex="-1"></a>    svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)<span class="op">.</span><span class="fu">call</span>(yAxis)<span class="op">;</span></span>
+<span id="cb4-141"><a href="#cb4-141" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-142"><a href="#cb4-142" aria-hidden="true" tabindex="-1"></a>    svg<span class="op">.</span><span class="fu">append</span>(<span class="st">"g"</span>)<span class="op">.</span><span class="fu">call</span>(legend_finance)<span class="op">;</span></span>
+<span id="cb4-143"><a href="#cb4-143" aria-hidden="true" tabindex="-1"></a>  }<span class="op">;</span></span>
+<span id="cb4-144"><a href="#cb4-144" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-145"><a href="#cb4-145" aria-hidden="true" tabindex="-1"></a>  <span class="cf">return</span> svg<span class="op">.</span><span class="fu">node</span>()<span class="op">;</span></span>
+<span id="cb4-146"><a href="#cb4-146" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-4">
+
+</div>
+</div>
+</div>
+<p>Looking at this chart, we can see that over the last several years, the three biggest airlines in terms of revenue were mainly Delta Airlines, American Airlines, and United Airlines. These three also have the biggest income out of all airlines, however, when we look at the ranking by income, Southwest Airlines, which has significantly lower revenue than those three were up there, indicating that despite small revenues, it is doing well in terms of income and is matching that of those big companies.</p>
+<p>There is an anomaly in the year 2020 where the revenue significantly dropped for those airlines and that the income is heavily in the negative side. This signifies that the impact of virus is very detrimental to commercial airines. The only airline with some portion of positive income is Federal Express Corparation (FX) which is solely for cargo delivery.</p>
+</section>
+</section>
+<section id="customer-satisfaction" class="level2">
+<h2 class="anchored" data-anchor-id="customer-satisfaction">Customer Satisfaction</h2>
+<section id="customer-satisfaction-by-flight-distance" class="level3">
+<h3 class="anchored" data-anchor-id="customer-satisfaction-by-flight-distance">Customer Satisfaction by Flight Distance</h3>
+<p>This part of the visualization looks broader into the service categories, such as “Gate location”, “Legroom Service” and so on. This visualization was created hoping to gain more insight on the relationship between customer satsifcation for each of the services and the travel distances of each customers.</p>
+<p>There are total 14 service categories used in this visualization :</p>
+<ul>
+<li>“Inflight wifi service”<br>
+</li>
+<li>“Departure/Arrival time convenient”<br>
+</li>
+<li>“Ease of Online booking”<br>
+</li>
+<li>“Gate location”<br>
+</li>
+<li>“Food and drink”<br>
+</li>
+<li>“Online boarding”<br>
+</li>
+<li>“Seat comfort”<br>
+</li>
+<li>“Inflight entertainment”<br>
+</li>
+<li>“On-board service”<br>
+</li>
+<li>“Leg room service”<br>
+</li>
+<li>“Baggage handling”<br>
+</li>
+<li>“Checkin service”<br>
+</li>
+<li>“Inflight service”<br>
+</li>
+<li>“Cleanliness”</li>
+</ul>
+<p>These categories are given scores that represents the customer satisfaction, ranging from 0 to 5, with 0 being not satisfactory at all, and 5 being very satisfactory.</p>
+<p>The scores are further broken down into each customer’s travel distance, which consists of * &lt;= 1000 miles * 1001-2000 miles * 2001-3000 miles * 3001-4000 miles * =&gt; 4000 miles</p>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb5"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a>viewof dataType <span class="op">=</span> <span class="fu">select</span>({</span>
+<span id="cb5-2"><a href="#cb5-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Select Data that you are interested in"</span><span class="op">,</span></span>
+<span id="cb5-3"><a href="#cb5-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">options</span><span class="op">:</span> dtype</span>
+<span id="cb5-4"><a href="#cb5-4" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-5">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb6"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>chart5_Color</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-6">
+
+</div>
+</div>
+</div>
+<p>Looking at the chart above, we can see the trend of customer satisfaction by distance.</p>
+<p>As it can be seen from the graph, the number of customers with travel distance greater than 4000 miles are less than 500 people. Hence, they have the lowest ratio in the grouped bar chart of customer satisfaction grouped by travel distances. On the contrary, the majority of the people had travelling distance less than 1000 miles. This means that the customer’s trips are mostly domestic, and short-mid range interncontinental rather than long range intercontinental.</p>
+<p>The general trendline across most of the categories is that customers regardless of the distance of the travel, are generally satisfied with the services that the airline is providing. However, the key point is that the dataset is heavily biased towards the domestic, short range travellers.</p>
+<p><strong>Some notable key points are :</strong></p>
+<p>even though the general trend of the gateway location score higher than 3 (meaning that people are generally satisfied with the gateway location), most of the customers thought that the gateway location was somewhat satisfying, rather than highly satisfying. None thought that it was not satisfactory at all.</p>
+<p>Another similar finding is for the “in-flight wifi service”, and “ease of online booking”; The consensus is that the service was somewhat satisfactory, however, there were some customers who found it to be not satisfactory at all, which occured for almost all distances.</p>
+<p>Moreover, there were a high ratio of the customers who had travel distance of less than 1000, who were not satisfied with the time convenience, or the “Departure/Arrival time convenience”, compared to customers with other groups of travel distances.</p>
+<p>Therefore, keeping a focus on these points would result in higher overall customer satisfaction.</p>
+<p>If there existed a dataset that has standard deviation applied to it, it would also yield more information about how sample of travellers actually think about the services in less biased way.</p>
+<p><strong>All in all</strong>, if the data fully reflects the correct ratio of the customers, then it would be ideal to continue focusing on the opinions of the domestic, short, mid range intercontinental distance travellers, as they outnumber the number of the long range intercontinental travellers. This seems like a suitable strategy for now, as many airline companies have less profitable revenue in interncontinental flights due to COVID.</p>
+</section>
+<section id="satisfaction-by-customer-traits" class="level3">
+<h3 class="anchored" data-anchor-id="satisfaction-by-customer-traits">Satisfaction by Customer Traits</h3>
+<p>Let’s breakdown these service categories further. Ideally, these should give a better picture of customer experience than the overall satisfaction variable, which is just a simple binary variable (satisfied or not). Do these categories correlate to satisfaction overall?</p>
+<p>We also wanted to view how service categories of flight experience were rated between different types of customers. Do we notice a change in ratings between different passengers? To do this, we selected 8 <strong>categories of ratings</strong> that felt representative of the overall flight experience: - On Time (how convenient was arrival and departure time?) - Booking (ease of the booking process) - Check in (ease of the check in process) - Seat Comfort - Service (quality of inflight service) - Food &amp; Drink (quality of inflight food and drink) - Entertainment (quality of inflight entertainment options) - Cleanliness</p>
+<p>For each category, the data was grouped by a certain customer trait and summarized by average rating. We identified 5 types of customer <strong>groupings</strong> with significant meaning: - Passenger class (Economy, Economy Plus, Business) - Type of travel (business or personal) - Loyalty to airline (fly only with this airline or also with others) - Age (quantized by children, young adults, adults and seniors) - Overall satisfaction (this was included to answer our first question– are higher ratings indicative of higher satisfaction?)</p>
+<p>Select a grouping below to view the average ratings for each category:</p>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb7"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a>viewof group <span class="op">=</span> <span class="fu">select</span>({</span>
+<span id="cb7-2"><a href="#cb7-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">description</span><span class="op">:</span> <span class="st">"Select grouping"</span><span class="op">,</span></span>
+<span id="cb7-3"><a href="#cb7-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">options</span><span class="op">:</span> filters</span>
+<span id="cb7-4"><a href="#cb7-4" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-7">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb8"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a>chart_satis</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-8">
+
+</div>
+</div>
+</div>
+<p>There are several interesting trends to observe here.</p>
+<p>For one, business class passengers tend to rate their experiences higher than economy / economy plus passengers. However, business class rated their arrival and departure times significantly lower on average. This effect can also be seen in the <em>Type of Travel</em> grouping, where people flying for business generally rate most parts of their experience higher, but not on time. In fact, compared to the difference in categories like <em>Service</em> or even <em>Seat Comfort</em> the difference in <em>On Time</em> is much larger.</p>
+<p>Across age groups, adults (25 - 46) tended to rate their experiences the highest. Young adults (18 - 24) generally came next, followed by children and seniors in no particular order. Again here there was some variation with the <em>On Time</em> category, where seniors and children rated their experience higher.</p>
+<p>In terms of <em>customer loyalty</em>, passengers who consistently flew with their airline rated their experiences on average higher across the board than those who fly with multiple airlines.</p>
+<p>Across all groupings, customers generally rated the <em>booking</em> experience lowest.</p>
+<p><em>Overall satisfaction</em>, while seemingly a redudant grouping, does confirm that there is a correlation between higher individual ratings and overall satisfaction. This grouping had the largest differences between average ratings, suggesting that satisfaction in each individual rating does matter for overall satisfaction.</p>
+<p><strong>What does all of this tell us about the customer experience?</strong> For business class passengers (and passengers traveling for the purpose of business) timeliness of arrival and departure appears to be the biggest area in need of improvement. For these customers, airlines should focus their attention on the convience of arrival and departure times.</p>
+<p>In terms of age, the lowest satisfaction was among children and seniors. While this is perhaps somewhat unavoidable– it is not hard to imagine how young kids and elderly people tend have a worse experience than adults on flights– airlines could improve their success in customer satisfaction by making accomodations for these groups.</p>
+<p>In terms of airline loyalty, there are few surprises here. Customers who are loyal to an airline tend to be more satisfied than those who are not. Airlines should continue to focus on maintaining customer loyalty, as customers who consistently fly with the same airline tend to rate their experiences higher.</p>
+<p>Finally, across the board, the booking experience tends to be the lowest rated. While this occurs outside the airport and plane, it is a crucial part of the flying process–and one that airlines could do well not to overlook for improving customer satsifaction.</p>
+</section>
+<section id="how-do-arrival-and-departure-delays-affect-satisfaction" class="level3">
+<h3 class="anchored" data-anchor-id="how-do-arrival-and-departure-delays-affect-satisfaction">How do Arrival and Departure Delays Affect Satisfaction?</h3>
+<p>We saw in the chart above that arrival and departure times were a big factor for business customers. However, that visualization doesn’t really give a good sense of the actual impact delays have on satisfaction because we’re just looking at averages across customer groups. We wanted to know: <em>do greater delay times reduce customer satisfaction overall</em>?</p>
+<p>To do this, we averaged satsifaction rates and compared them to the actual delay times. The dataset provides a time in minutes for both arrival and departure delay in minutes for each customer; we grouped by these delay times and calculated satisfaction rate by dividing the number of satisfied passengers by the total number of passengers with that delay time. However, because the times are in minutes, there is a lot of variation in the number of passengers at different times (i.e.&nbsp;0 minutes has many passengers, but a random number like 107 might only have a handful).</p>
+<p>To counteract this, we added a noise filter that divides delay times into ranges (0 - 10 minutes, etc.). Satisfaction rates are then averaged over that range, giving a clearer picture of actual satisfaction rates. We also treated delays above 200 as outliers, as there simply aren’t enough passengers at these times to get a significant average.</p>
+<p>Slide the noise filter below to adjust the ranges:</p>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb9"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a>viewof delay_noise <span class="op">=</span> <span class="fu">slider</span>({</span>
+<span id="cb9-2"><a href="#cb9-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">min</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span></span>
+<span id="cb9-3"><a href="#cb9-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">max</span><span class="op">:</span> <span class="dv">50</span><span class="op">,</span></span>
+<span id="cb9-4"><a href="#cb9-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">step</span><span class="op">:</span> <span class="dv">5</span><span class="op">,</span></span>
+<span id="cb9-5"><a href="#cb9-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">value</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span></span>
+<span id="cb9-6"><a href="#cb9-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">title</span><span class="op">:</span> <span class="st">"Delay Noise Filter"</span><span class="op">,</span></span>
+<span id="cb9-7"><a href="#cb9-7" aria-hidden="true" tabindex="-1"></a>  <span class="dt">description</span><span class="op">:</span></span>
+<span id="cb9-8"><a href="#cb9-8" aria-hidden="true" tabindex="-1"></a>    <span class="st">"Quantizes delay into ranges (larger values = larger range to average over)"</span></span>
+<span id="cb9-9"><a href="#cb9-9" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-9">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb10"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a>delay_chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-10">
+
+</div>
+</div>
+</div>
+<p>Overall, we do see a decline in satisfaction rates as delay time increases. Depending on the size of the noise filter, we see the steepest dropoff in satisfaction from 0 to around 40 or 50 minutes, in both arrival and departure delay.</p>
+<p>At higher delays (above ~ 80 minutes), the graph begins to get noisy with steep fluctations in satisfaction. We can see, however, that this is explained by lower numbers of passengers at these times. At higher noise filter values (&gt; 20), the rates begin to flatten out at the end, suggesting that delays above 40 - 50 minutes have less of a reduction effect on satisfaction.</p>
+<p><strong>What can airlines take away from this?</strong> The greatest impact on satisfaction rates happens when delay times are between 0 and 40 - 50 minutes. While delays longer than this also have a negative effect on satisfaction, it is far less drastic.</p>
+<p>It’s possible that once a passenger has been delayed long enough, further time spent waiting won’t affect their satisfaction as much– a 1 hour delay is just as a annoying 2 hour one because from the perspective of the passenger, they’re both too long. Furthermore, as delay times get higher we start to look at more edge cases– flights that are grounded due to weather, for instance, or equipment failure. While still frustrating, these are more understandable causes for delays than say runway or gate traffic.</p>
+<p>Airlines, then, could do well to focus their attention on minimizing delays under the 40 - 50 minute mark. This is where the biggest improvement on customer satisfaction can be made– flights that are delayed further might have extenuating cases, and tend to reduce satisfaction at a much lesser rate.</p>
+</section>
+</section>
+<section id="pandemic-and-its-negative-impact-on-airline-the-up-and-down-of-aviation-industry" class="level2">
+<h2 class="anchored" data-anchor-id="pandemic-and-its-negative-impact-on-airline-the-up-and-down-of-aviation-industry">Pandemic and its negative impact on airline: The up and down of aviation industry</h2>
+<p>Let’s take a closer look into 2020 and how the global pandemic began to impact the aviation industry. Using data obtained from the Bureau of Transportation Statistics, below you can explore the operations of top US Airlines throughout the beginning of 2020.</p>
+<div class="quarto-layout-panel">
+<div class="quarto-layout-row quarto-layout-valign-top">
+<div class="cell quarto-layout-cell" data-echo="false" style="flex-basis: 50.0%;justify-content: center;">
+<div class="sourceCode hidden" id="cb11"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>viewof carrier <span class="op">=</span> <span class="fu">select</span>({</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">options</span><span class="op">:</span> carrier_options<span class="op">,</span></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">placeholder</span><span class="op">:</span> <span class="st">"Search carriers..."</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-11">
+
+</div>
+</div>
+</div>
+<div class="cell quarto-layout-cell" data-echo="false" style="flex-basis: 50.0%;justify-content: center;">
+<div class="sourceCode hidden" id="cb12"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a>viewof airport <span class="op">=</span> <span class="fu">select</span>({</span>
+<span id="cb12-2"><a href="#cb12-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">options</span><span class="op">:</span> airport_options</span>
+<span id="cb12-3"><a href="#cb12-3" aria-hidden="true" tabindex="-1"></a>})</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-12">
+
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb13"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>mb_chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-13">
+
+</div>
+</div>
+</div>
+<p>Although it may not be true for all airlines at all airports, while exploring the data set above you may begin to see a trend appear - significant fluctuations from March to June. Specifically looking at a high income Airline like Delta Airlines, at many of the airports it services there were huge dropoffs in the month of March, then an increase in April. These types of general observations helped us to realize COVID-19 did have an impact on the aviation industry and we dove into more data to find out what kind of impact that was.</p>
+<section id="airline-traffic-covid-19" class="level4">
+<h4 class="anchored" data-anchor-id="airline-traffic-covid-19">Airline Traffic &amp; COVID-19</h4>
+<p>To more closely define the relationship between COVID-19 and aviation traffic during, we will examine data obtained from TSA. This data contains the total passenger throughput measured through passengers that go through screening in airports in the United States. We will use this comparison to represent airline traffic. The dates in the 2019 line on the visualization are exact same dates as ones used for the 2020 line. On the y-axis is the number of passengers that have passed through TSA’s security screening.</p>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb14"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>throughput_chart</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-14">
+
+</div>
+</div>
+</div>
+<p>From the visualization above, we make a clear difference between the line representing 2019 and the line representing 2020. There was a huge drop between March and April, which was the time in which the outbreak occurred and lockdowns started to take place in major cities around the United States. As summer approached, we see a slow rise in passenger throughput as people travel around the country to either go home for school or take summer plans. Again we see a strong rise around Thanksgiving holidays as people travel again around the country during holiday season; however we then see another fall in passenger throughput almost immediately after.</p>
+<p>Overall, we can clearly see that ** it would take for a long period of time for the aviation industry to fully recover ** to even to just pre-pandemic numbers. With the current pandemic still rapidly spreading and nations still in lockdown, airlines should, like mentioned above, target shorter distances and perhaps even better services in response to the pandemic.</p>
+<p>Optimistically, with the vaccine developments underway, hopefully the aviation industry would quickly bounce back to its pre-pandemic numbers. In the meantime, it is still important for airlines and passengers to continue to implement and perform safety measures to protect oneself and others.</p>
+</section>
+</section>
+<section id="conclusion" class="level2">
+<h2 class="anchored" data-anchor-id="conclusion">Conclusion</h2>
+<p>The aviation industry has changed tremendously over the last 30 years. With increasing competition in the industry, finding areas of improvement that will maximize overall success is crutial.</p>
+<p>Based on the data we investigated above, airlines can increase their overall income and success through focusing on their customer satisfaction.</p>
+<p>In terms of customer satisfaction, there are definite key areas that airlines can focus on improving. Our visualizations show that children and seniors are the least satisfied with flight experience, and loyal customers have better experiences overall. Focusing on accomodations for children and seniors and building customer loyalty can help airlines improve satisfaction across the board.</p>
+<p>The data has also shown that longer delays do reduce customer satisfaction. In particular, business passengers (both those flying in business class and/or for the purpose of business) are the least satisfied by arrival and departure times, compared both with non-business passengers and with satisfaction rates in other categories. In terms of length, delays have the biggest effect on customer satisfaction in the interval between 0 and around 50 minutes. Airlines should focus on both reducing delays for business passengers and improving delays when they are less than an hour.</p>
+<p>Understanding the customer’s reason for travel and keeping delays to a minimum will increase loyalty and success. With the majority of flights being under 1000 miles, focusing on making these flights as smooth as possible will increase the satisfaction of the largest group of customers. In relation to COVID-19, the airlines that have diverse flight purpose (ie. consumer travel and cargo shipment) have been able to maintain a profit during these unprecedented times.</p>
+</section>
+<section id="appendix" class="level1 hidden">
+<h1 class="hidden">Appendix</h1>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb15"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb15-1"><a href="#cb15-1" aria-hidden="true" tabindex="-1"></a>d3 <span class="op">=</span> <span class="pp">require</span>(<span class="st">"d3"</span><span class="op">,</span> <span class="st">"d3@5"</span><span class="op">,</span> <span class="st">"d3@6"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-15">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb16"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { select<span class="op">,</span> slider } <span class="im">from</span> <span class="st">"@jashkenas/inputs"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-16">
+
+</div>
+</div>
+</div>
+<section id="finance-chart-data" class="level4">
+<h4 class="anchored" data-anchor-id="finance-chart-data">Finance Chart Data</h4>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb17"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb17-1"><a href="#cb17-1" aria-hidden="true" tabindex="-1"></a>raw_data <span class="op">=</span> d3<span class="op">.</span><span class="fu">csvParse</span>(</span>
+<span id="cb17-2"><a href="#cb17-2" aria-hidden="true" tabindex="-1"></a>  <span class="cf">await</span> <span class="fu">FileAttachment</span>(<span class="st">"airline_expense_revenue.csv"</span>)<span class="op">.</span><span class="fu">text</span>()<span class="op">,</span></span>
+<span id="cb17-3"><a href="#cb17-3" aria-hidden="true" tabindex="-1"></a>  d3<span class="op">.</span><span class="at">autoType</span></span>
+<span id="cb17-4"><a href="#cb17-4" aria-hidden="true" tabindex="-1"></a>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-17">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb18"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>select_data <span class="op">=</span> raw_data<span class="op">.</span><span class="fu">map</span>(d <span class="kw">=&gt;</span> ({</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>  <span class="dt">income</span><span class="op">:</span> <span class="op">+</span>d[<span class="st">"NET_INCOME"</span>]<span class="op">,</span></span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>  <span class="dt">airline</span><span class="op">:</span> d[<span class="st">"CARRIER_NAME"</span>]<span class="op">,</span></span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">revenue</span><span class="op">:</span> d[<span class="st">"OP_REVENUES"</span>]<span class="op">,</span></span>
+<span id="cb18-5"><a href="#cb18-5" aria-hidden="true" tabindex="-1"></a>  <span class="dt">year</span><span class="op">:</span> d[<span class="st">"YEAR"</span>]<span class="op">,</span></span>
+<span id="cb18-6"><a href="#cb18-6" aria-hidden="true" tabindex="-1"></a>  <span class="dt">airCode</span><span class="op">:</span> d<span class="op">.</span><span class="at">CARRIER</span></span>
+<span id="cb18-7"><a href="#cb18-7" aria-hidden="true" tabindex="-1"></a>}))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-18">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb19"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb19-1"><a href="#cb19-1" aria-hidden="true" tabindex="-1"></a>legend_finance <span class="op">=</span> svg <span class="kw">=&gt;</span> {</span>
+<span id="cb19-2"><a href="#cb19-2" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> g <span class="op">=</span> svg</span>
+<span id="cb19-3"><a href="#cb19-3" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> <span class="vs">`translate(</span><span class="sc">${</span>width<span class="sc">}</span><span class="vs">,0)`</span>)</span>
+<span id="cb19-4"><a href="#cb19-4" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"text-anchor"</span><span class="op">,</span> <span class="st">"end"</span>)</span>
+<span id="cb19-5"><a href="#cb19-5" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"font-family"</span><span class="op">,</span> <span class="st">"sans-serif"</span>)</span>
+<span id="cb19-6"><a href="#cb19-6" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"font-size"</span><span class="op">,</span> <span class="dv">10</span>)</span>
+<span id="cb19-7"><a href="#cb19-7" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">selectAll</span>(<span class="st">"g"</span>)</span>
+<span id="cb19-8"><a href="#cb19-8" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">data</span>(color<span class="op">.</span><span class="fu">domain</span>())</span>
+<span id="cb19-9"><a href="#cb19-9" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">join</span>(<span class="st">"g"</span>)</span>
+<span id="cb19-10"><a href="#cb19-10" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"transform"</span><span class="op">,</span> (d<span class="op">,</span> i) <span class="kw">=&gt;</span> <span class="vs">`translate(0,</span><span class="sc">${</span>i <span class="op">*</span> <span class="dv">20</span><span class="sc">}</span><span class="vs">)`</span>)<span class="op">;</span></span>
+<span id="cb19-11"><a href="#cb19-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-12"><a href="#cb19-12" aria-hidden="true" tabindex="-1"></a>  g<span class="op">.</span><span class="fu">append</span>(<span class="st">"rect"</span>)</span>
+<span id="cb19-13"><a href="#cb19-13" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> <span class="op">-</span><span class="dv">19</span>)</span>
+<span id="cb19-14"><a href="#cb19-14" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"width"</span><span class="op">,</span> <span class="dv">19</span>)</span>
+<span id="cb19-15"><a href="#cb19-15" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"height"</span><span class="op">,</span> <span class="dv">19</span>)</span>
+<span id="cb19-16"><a href="#cb19-16" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"fill"</span><span class="op">,</span> color)<span class="op">;</span></span>
+<span id="cb19-17"><a href="#cb19-17" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb19-18"><a href="#cb19-18" aria-hidden="true" tabindex="-1"></a>  g<span class="op">.</span><span class="fu">append</span>(<span class="st">"text"</span>)</span>
+<span id="cb19-19"><a href="#cb19-19" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"x"</span><span class="op">,</span> <span class="op">-</span><span class="dv">24</span>)</span>
+<span id="cb19-20"><a href="#cb19-20" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"y"</span><span class="op">,</span> <span class="fl">9.5</span>)</span>
+<span id="cb19-21"><a href="#cb19-21" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">attr</span>(<span class="st">"dy"</span><span class="op">,</span> <span class="st">"0.35em"</span>)</span>
+<span id="cb19-22"><a href="#cb19-22" aria-hidden="true" tabindex="-1"></a>    <span class="op">.</span><span class="fu">text</span>(d <span class="kw">=&gt;</span> d)<span class="op">;</span></span>
+<span id="cb19-23"><a href="#cb19-23" aria-hidden="true" tabindex="-1"></a>}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-19">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb20"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>tooltip <span class="op">=</span> d3</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">select</span>(<span class="st">'body'</span>)</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">append</span>(<span class="st">'div'</span>)</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">attr</span>(<span class="st">'class'</span><span class="op">,</span> <span class="st">'d3-tooltip'</span>)</span>
+<span id="cb20-5"><a href="#cb20-5" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'position'</span><span class="op">,</span> <span class="st">'absolute'</span>)</span>
+<span id="cb20-6"><a href="#cb20-6" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'z-index'</span><span class="op">,</span> <span class="st">'10'</span>)</span>
+<span id="cb20-7"><a href="#cb20-7" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'visibility'</span><span class="op">,</span> <span class="st">'hidden'</span>)</span>
+<span id="cb20-8"><a href="#cb20-8" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'padding'</span><span class="op">,</span> <span class="st">'10px'</span>)</span>
+<span id="cb20-9"><a href="#cb20-9" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'background'</span><span class="op">,</span> <span class="st">'rgba(0,0,0,0.6)'</span>)</span>
+<span id="cb20-10"><a href="#cb20-10" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'border-radius'</span><span class="op">,</span> <span class="st">'4px'</span>)</span>
+<span id="cb20-11"><a href="#cb20-11" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">style</span>(<span class="st">'color'</span><span class="op">,</span> <span class="st">'#fff'</span>)</span>
+<span id="cb20-12"><a href="#cb20-12" aria-hidden="true" tabindex="-1"></a>  <span class="op">.</span><span class="fu">text</span>(<span class="st">'a simple tooltip'</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-20">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb21"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb21-1"><a href="#cb21-1" aria-hidden="true" tabindex="-1"></a>color <span class="op">=</span> d3<span class="op">.</span><span class="fu">scaleOrdinal</span>()<span class="op">.</span><span class="fu">range</span>([<span class="st">"#98abc5"</span><span class="op">,</span> <span class="st">"#8a89a6"</span>])</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-21">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb22"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>margin <span class="op">=</span> ({ <span class="dt">top</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">right</span><span class="op">:</span> <span class="dv">10</span><span class="op">,</span> <span class="dt">bottom</span><span class="op">:</span> <span class="dv">40</span><span class="op">,</span> <span class="dt">left</span><span class="op">:</span> <span class="dv">40</span> })</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-22">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb23"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb23-1"><a href="#cb23-1" aria-hidden="true" tabindex="-1"></a>keys <span class="op">=</span> [<span class="st">"revenue"</span><span class="op">,</span> <span class="st">"income"</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-23">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb24"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>finance_chart<span class="op">.</span><span class="fu">update</span>(options_select<span class="op">,</span> yearSlider<span class="op">,</span> sort_by)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-24">
+
+</div>
+</div>
+</div>
+<p>Customer Satisfaction by distance in various categories</p>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb25"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { dtype<span class="op">,</span> chart5_Color } <span class="cf">with</span> {</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>  dataType</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>} <span class="im">from</span> <span class="st">"@jinson/final-project-satisfaction-by-category"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-25">
+
+</div>
+</div>
+</div>
+</section>
+<section id="delay-imports" class="level3">
+<h3 class="anchored" data-anchor-id="delay-imports">Delay Imports</h3>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb26"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { delay_chart } <span class="cf">with</span> {</span>
+<span id="cb26-2"><a href="#cb26-2" aria-hidden="true" tabindex="-1"></a>  delay_noise</span>
+<span id="cb26-3"><a href="#cb26-3" aria-hidden="true" tabindex="-1"></a>} <span class="im">from</span> <span class="st">"@kylerws/474-final-project-delay-chart"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-26">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb27"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb27-1"><a href="#cb27-1" aria-hidden="true" tabindex="-1"></a>delay_chart<span class="op">.</span><span class="fu">update</span>(delay_noise)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-27">
+
+</div>
+</div>
+</div>
+</section>
+<section id="customer-satisfaction-imports" class="level3">
+<h3 class="anchored" data-anchor-id="customer-satisfaction-imports">Customer Satisfaction Imports</h3>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb28"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { chart_satis<span class="op">,</span> filters } <span class="cf">with</span> {</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>  group</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>} <span class="im">from</span> <span class="st">"@kylerws/474-final-project-charts"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-28">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb29"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb29-1"><a href="#cb29-1" aria-hidden="true" tabindex="-1"></a>chart_satis<span class="op">.</span><span class="fu">update</span>(group)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-29">
+
+</div>
+</div>
+</div>
+</section>
+<section id="passenger-throughput-imports" class="level3">
+<h3 class="anchored" data-anchor-id="passenger-throughput-imports">Passenger Throughput Imports</h3>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb30"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { throughput_chart<span class="op">,</span> legend_covid } <span class="im">from</span> <span class="st">"@kevinko/final-deliverable-viz"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-30">
+
+</div>
+</div>
+</div>
+<style>
+.grid-lines line {
+  stroke: gray;
+  stroke-opacity: 0.2;
+}
+</style>
+</section>
+<section id="airline-operations-imports" class="level3">
+<h3 class="anchored" data-anchor-id="airline-operations-imports">Airline Operations Imports</h3>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb31"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb31-1"><a href="#cb31-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> { mb_chart<span class="op">,</span> flightsByCarrier<span class="op">,</span> carrier_options } <span class="cf">with</span> {</span>
+<span id="cb31-2"><a href="#cb31-2" aria-hidden="true" tabindex="-1"></a>  airport<span class="op">,</span></span>
+<span id="cb31-3"><a href="#cb31-3" aria-hidden="true" tabindex="-1"></a>  carrier</span>
+<span id="cb31-4"><a href="#cb31-4" aria-hidden="true" tabindex="-1"></a>} <span class="im">from</span> <span class="st">"@uw-info474/monthly-airline-operations-by-airport-from-january-august"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-31">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb32"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>carrier_flights <span class="op">=</span> flightsByCarrier<span class="op">.</span><span class="fu">get</span>(carrier)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-32">
+
+</div>
+</div>
+</div>
+<div class="cell" data-echo="false">
+<div class="sourceCode hidden" id="cb33"><pre class="sourceCode js cell-code code-with-copy"><code class="sourceCode javascript"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>airport_options <span class="op">=</span> [</span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>  <span class="op">...</span>d3<span class="op">.</span><span class="fu">group</span>(d3<span class="op">.</span><span class="fu">group</span>(carrier_flights<span class="op">,</span> d <span class="kw">=&gt;</span> d<span class="op">.</span><span class="at">airport</span>))<span class="op">.</span><span class="fu">keys</span>()</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div id="ojs-cell-33">
+
+</div>
+</div>
+</div>
+<!-- -->
+</section>
+</section>
+</main>
+</div> <!-- /main column -->
+</div> <!-- /row -->
+</div> <!-- /container fluid -->
+<script type="module">
+window._ojs.paths.runtimeToDoc = "../../..";
+window._ojs.paths.runtimeToRoot = "../../..";
+window._ojs.paths.docToRoot = "";
+window._ojs.selfContained = false;
+window._ojs.runtime.interpret("" + "viewof options_select = select({\n" + "  title: \"Select Range of Airlines\",\n" + "  options: [\"All\", \"Top 1-20\", \"Mid 21-30\", \"Bot 31-50\"]\n" + "})", "ojs-cell-1", false);
+window._ojs.runtime.interpret("" + "viewof sort_by = select({\n" + "  title: \"Sort by\",\n" + "  options: [\"Revenue\", \"Income\"]\n" + "})", "ojs-cell-2", false);
+window._ojs.runtime.interpret("" + "viewof yearSlider = slider({\n" + "  title: \"Select Year Slider\",\n" + "  min: 1990,\n" + "  max: 2020,\n" + "  step: 1,\n" + "  value: 2020,\n" + "  description: \"Use the slider to select year\"\n" + "})", "ojs-cell-3", false);
+window._ojs.runtime.interpret("" + "finance_chart = {\n" + "  const height = 500;\n" + "  const filter = {\n" + "    All: [0, 51],\n" + "    \"Top 1-20\": [0, 20],\n" + "    \"Mid 21-30\": [21, 30],\n" + "    \"Bot 31-50\": [31, 51]\n" + "  };\n" + "  const svg = d3.create(\"svg\").attr(\"viewBox\", [0, 0, width, height]);\n" + "  svg.node().update = (metrics, inputYear, opt) => {\n" + "    svg.selectAll(\"*\").remove();\n" + "    const filt_year = select_data.filter(d => d.year == inputYear);\n" + "\n" + "    let data_grouped = [];\n" + "    filt_year.reduce(function(res, value) {\n" + "      if (!res[value.airline]) {\n" + "        res[value.airline] = {\n" + "          airline: value.airline,\n" + "          income: 0,\n" + "          revenue: 0,\n" + "          code: value.airCode,\n" + "          year: value.year\n" + "        };\n" + "        data_grouped.push(res[value.airline]);\n" + "      }\n" + "      res[value.airline].income += value.income;\n" + "      res[value.airline].revenue += value.revenue;\n" + "      return res;\n" + "    }, {});\n" + "    data_grouped = data_grouped.sort(function(a, b) {\n" + "      if (opt == \"Revenue\") {\n" + "        return b.revenue - a.revenue;\n" + "      }\n" + "      return b.income - a.income;\n" + "    });\n" + "\n" + "    const filt_range = filter[metrics];\n" + "    const filtered_data = data_grouped.slice(filt_range[0], filt_range[1]);\n" + "\n" + "    const x0 = d3\n" + "      .scaleBand()\n" + "      .domain(filtered_data.map(d => d[\"code\"]))\n" + "      .rangeRound([margin.left, width - margin.right])\n" + "      .paddingInner(0.1);\n" + "\n" + "    const x1 = d3\n" + "      .scaleBand()\n" + "      .domain(keys)\n" + "      .rangeRound([0, x0.bandwidth()])\n" + "      .padding(0.05);\n" + "\n" + "    const y = d3\n" + "      .scaleLinear()\n" + "      .domain([\n" + "        d3.min(filtered_data, d => d3.min(keys, key => d[key])),\n" + "        d3.max(filtered_data, d => d3.max(keys, key => d[key]))\n" + "      ])\n" + "      .nice()\n" + "      .range([height - margin.bottom, margin.top]);\n" + "\n" + "    svg\n" + "      .append(\"g\")\n" + "      .selectAll(\"g\")\n" + "      .data(filtered_data)\n" + "      .join(\"g\")\n" + "      .attr(\"transform\", d => `translate(${x0(d.code)},0)`)\n" + "      .selectAll(\"rect\")\n" + "      .data(d => keys.map(key => ({ key, value: d[key], airline: d.airline })))\n" + "      .join(\"rect\")\n" + "      .attr(\"x\", d => x1(d.key))\n" + "      .attr(\"y\", d => {\n" + "        if (d.value < 0) {\n" + "          return y(0);\n" + "        } else {\n" + "          return y(d.value);\n" + "        }\n" + "      })\n" + "      .attr(\"width\", x1.bandwidth())\n" + "      .attr(\"height\", d => Math.abs(y(0) - y(d.value)))\n" + "      .attr(\"fill\", d => color(d.key))\n" + "      .on('mouseenter', function(e, d, i) {\n" + "        tooltip\n" + "          .html(\n" + "            `<div>${d.airline}</div><div>${d.key}</div><div>${Math.round(\n" + "              d.value\n" + "            )}</div>`\n" + "          )\n" + "          .style('visibility', 'visible');\n" + "\n" + "        d3.select(this).attr('fill', '#eec42d');\n" + "      })\n" + "      .on('mousemove', function(e) {\n" + "        const side_padding = 3;\n" + "        let x = e.pageX - 50;\n" + "        let y = e.pageY - 180;\n" + "        tooltip.style('top', y + 10 + 'px').style('left', x + 10 + 'px');\n" + "      })\n" + "      .on('mouseout', function() {\n" + "        tooltip.html(``).style('visibility', 'hidden');\n" + "        d3.select(this)\n" + "          .transition()\n" + "          .attr('fill', d => color(d.key));\n" + "      });\n" + "\n" + "    // update xaxis too\n" + "\n" + "    const xAxis = g =>\n" + "      g\n" + "        .attr(\"transform\", `translate(0,${height - margin.bottom})`)\n" + "        .call(d3.axisBottom(x0).tickSizeOuter(0))\n" + "        .call(g => g.select(\".domain\").remove());\n" + "\n" + "    // update yaxis too\n" + "    const yAxis = g =>\n" + "      g\n" + "        .attr(\"transform\", `translate(${margin.left},0)`)\n" + "        .call(d3.axisLeft(y).ticks(null, \"s\"))\n" + "        .call(g => g.select(\".domain\").remove());\n" + "\n" + "    svg\n" + "      .append(\"text\")\n" + "      .text(metrics + \" Airlines Income and Revenue ($) in \" + yearSlider)\n" + "      .attr(\"transform\", \"translate(200, 30)\")\n" + "      .attr(\"font-weight\", \"bold\")\n" + "      .attr(\"font-size\", \"18px\");\n" + "\n" + "    svg\n" + "      .append(\"text\")\n" + "      .attr(\n" + "        \"transform\",\n" + "        `translate(${margin.left +\n" + "          (x0.range()[1] - x0.range()[0]) / 2},${height - 3})`\n" + "      )\n" + "      .style(\"text-anchor\", \"middle\")\n" + "      .attr(\"font-size\", \"12px\")\n" + "      .text(\"Airline code\");\n" + "\n" + "    svg.append(\"g\").call(xAxis);\n" + "\n" + "    svg.append(\"g\").call(yAxis);\n" + "\n" + "    svg.append(\"g\").call(legend_finance);\n" + "  };\n" + "\n" + "  return svg.node();\n" + "}", "ojs-cell-4", false);
+window._ojs.runtime.interpret("" + "viewof dataType = select({\n" + "  title: \"Select Data that you are interested in\",\n" + "  options: dtype\n" + "})", "ojs-cell-5", false);
+window._ojs.runtime.interpret("" + "chart5_Color", "ojs-cell-6", false);
+window._ojs.runtime.interpret("" + "viewof group = select({\n" + "  description: \"Select grouping\",\n" + "  options: filters\n" + "})", "ojs-cell-7", false);
+window._ojs.runtime.interpret("" + "chart_satis", "ojs-cell-8", false);
+window._ojs.runtime.interpret("" + "viewof delay_noise = slider({\n" + "  min: 10,\n" + "  max: 50,\n" + "  step: 5,\n" + "  value: 10,\n" + "  title: \"Delay Noise Filter\",\n" + "  description:\n" + "    \"Quantizes delay into ranges (larger values = larger range to average over)\"\n" + "})", "ojs-cell-9", false);
+window._ojs.runtime.interpret("" + "delay_chart", "ojs-cell-10", false);
+window._ojs.runtime.interpret("" + "viewof carrier = select({\n" + "  options: carrier_options,\n" + "  placeholder: \"Search carriers...\"\n" + "})", "ojs-cell-11", false);
+window._ojs.runtime.interpret("" + "viewof airport = select({\n" + "  options: airport_options\n" + "})", "ojs-cell-12", false);
+window._ojs.runtime.interpret("" + "mb_chart", "ojs-cell-13", false);
+window._ojs.runtime.interpret("" + "throughput_chart", "ojs-cell-14", false);
+window._ojs.runtime.interpret("" + "d3 = require(\"d3\", \"d3@5\", \"d3@6\")", "ojs-cell-15", false);
+window._ojs.runtime.interpret("" + "import { select, slider } from \"@jashkenas/inputs\"", "ojs-cell-16", false);
+window._ojs.runtime.interpret("" + "raw_data = d3.csvParse(\n" + "  await FileAttachment(\"airline_expense_revenue.csv\").text(),\n" + "  d3.autoType\n" + ")", "ojs-cell-17", false);
+window._ojs.runtime.interpret("" + "select_data = raw_data.map(d => ({\n" + "  income: +d[\"NET_INCOME\"],\n" + "  airline: d[\"CARRIER_NAME\"],\n" + "  revenue: d[\"OP_REVENUES\"],\n" + "  year: d[\"YEAR\"],\n" + "  airCode: d.CARRIER\n" + "}))", "ojs-cell-18", false);
+window._ojs.runtime.interpret("" + "legend_finance = svg => {\n" + "  const g = svg\n" + "    .attr(\"transform\", `translate(${width},0)`)\n" + "    .attr(\"text-anchor\", \"end\")\n" + "    .attr(\"font-family\", \"sans-serif\")\n" + "    .attr(\"font-size\", 10)\n" + "    .selectAll(\"g\")\n" + "    .data(color.domain())\n" + "    .join(\"g\")\n" + "    .attr(\"transform\", (d, i) => `translate(0,${i * 20})`);\n" + "\n" + "  g.append(\"rect\")\n" + "    .attr(\"x\", -19)\n" + "    .attr(\"width\", 19)\n" + "    .attr(\"height\", 19)\n" + "    .attr(\"fill\", color);\n" + "\n" + "  g.append(\"text\")\n" + "    .attr(\"x\", -24)\n" + "    .attr(\"y\", 9.5)\n" + "    .attr(\"dy\", \"0.35em\")\n" + "    .text(d => d);\n" + "}", "ojs-cell-19", false);
+window._ojs.runtime.interpret("" + "tooltip = d3\n" + "  .select('body')\n" + "  .append('div')\n" + "  .attr('class', 'd3-tooltip')\n" + "  .style('position', 'absolute')\n" + "  .style('z-index', '10')\n" + "  .style('visibility', 'hidden')\n" + "  .style('padding', '10px')\n" + "  .style('background', 'rgba(0,0,0,0.6)')\n" + "  .style('border-radius', '4px')\n" + "  .style('color', '#fff')\n" + "  .text('a simple tooltip')", "ojs-cell-20", false);
+window._ojs.runtime.interpret("" + "color = d3.scaleOrdinal().range([\"#98abc5\", \"#8a89a6\"])", "ojs-cell-21", false);
+window._ojs.runtime.interpret("" + "margin = ({ top: 10, right: 10, bottom: 40, left: 40 })", "ojs-cell-22", false);
+window._ojs.runtime.interpret("" + "keys = [\"revenue\", \"income\"]", "ojs-cell-23", false);
+window._ojs.runtime.interpret("" + "finance_chart.update(options_select, yearSlider, sort_by)", "ojs-cell-24", false);
+window._ojs.runtime.interpret("" + "import { dtype, chart5_Color } with {\n" + "  dataType\n" + "} from \"@jinson/final-project-satisfaction-by-category\"", "ojs-cell-25", false);
+window._ojs.runtime.interpret("" + "import { delay_chart } with {\n" + "  delay_noise\n" + "} from \"@kylerws/474-final-project-delay-chart\"", "ojs-cell-26", false);
+window._ojs.runtime.interpret("" + "delay_chart.update(delay_noise)", "ojs-cell-27", false);
+window._ojs.runtime.interpret("" + "import { chart_satis, filters } with {\n" + "  group\n" + "} from \"@kylerws/474-final-project-charts\"", "ojs-cell-28", false);
+window._ojs.runtime.interpret("" + "chart_satis.update(group)", "ojs-cell-29", false);
+window._ojs.runtime.interpret("" + "import { throughput_chart, legend_covid } from \"@kevinko/final-deliverable-viz\"", "ojs-cell-30", false);
+window._ojs.runtime.interpret("" + "import { mb_chart, flightsByCarrier, carrier_options } with {\n" + "  airport,\n" + "  carrier\n" + "} from \"@uw-info474/monthly-airline-operations-by-airport-from-january-august\"", "ojs-cell-31", false);
+window._ojs.runtime.interpret("" + "carrier_flights = flightsByCarrier.get(carrier)", "ojs-cell-32", false);
+window._ojs.runtime.interpret("" + "airport_options = [\n" + "  ...d3.group(d3.group(carrier_flights, d => d.airport)).keys()\n" + "]", "ojs-cell-33", false);
+window._ojs.runtime.finishInterpreting();
+</script>
+
+
+</body></html>
